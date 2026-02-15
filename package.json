@@ -1,7 +1,25 @@
 {
   "name": "next-branch",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
+  "description": "Opinionated fullstack Next.js starter template for experimenting and integrating modern packages like Prisma, Better Auth, shadcn/ui, and TanStack.",
+  "author": "Rino Saputra",
+  "license": "MIT",
+  "homepage": "https://github.com/rinosaputra/next-branch",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rinosaputra/next-branch.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rinosaputra/next-branch/issues"
+  },
+  "keywords": [
+    "nextjs",
+    "nextjs-starter",
+    "fullstack",
+    "boilerplate",
+    "typescript"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
