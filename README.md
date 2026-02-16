@@ -4,6 +4,11 @@
 
 A production-grade architectural foundation designed with **branch-based evolution**, clean integration patterns, and enterprise-ready structure.
 
+[![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue.svg)](https://www.typescriptlang.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-16.x-black.svg)](https://nextjs.org/)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+
 ---
 
 ## 🎯 Philosophy
@@ -17,6 +22,24 @@ This is **not** a tutorial project.
 - A **reusable foundation** for scalable SaaS applications
 - An **opinionated reference** for clean Next.js architecture
 - A **Git workflow blueprint** for disciplined feature integration
+
+---
+
+## 💡 Why This Exists
+
+**The Problem:**
+- Most Next.js starters are either too minimal (just CRA++) or too opinionated (locked into specific patterns)
+- Integrating modern tools like Prisma, shadcn/ui, and TanStack requires architectural decisions most developers repeat from scratch
+- No clear reference for production-grade Git workflows in fullstack repos
+
+**The Solution:**
+`next-branch` provides:
+- **Battle-tested integration patterns** that actually scale
+- **Clear architectural decisions** with documentation of *why*, not just *how*
+- **Git-based evolution model** that treats infrastructure as code
+- **Production-ready foundation** that doesn't force you into rigid abstractions
+
+This is the starter you wish existed when you started your last project.
 
 ---
 
@@ -91,7 +114,7 @@ npm install
 ```
 
 ### 3. Environment Setup
-Create a `.env` file:
+Create a `.env` file (copy from `.env.example`):
 ```env
 DATABASE_URL="postgresql://user:password@localhost:5432/next_branch_dev"
 ```
@@ -190,11 +213,14 @@ next-branch/
 ├── lib/
 │   ├── prisma.ts           # Prisma Client singleton
 │   └── utils.ts            # Utility functions (cn, etc.)
+├── hooks/                  # Custom React hooks
+├── types/                  # Shared TypeScript definitions
 ├── prisma/
 │   ├── schema.prisma       # Database schema
 │   └── migrations/         # Version-controlled migrations
 ├── components.json         # shadcn/ui configuration
 ├── next-branch.json        # Package metadata for npm
+├── .env.example            # Environment variable template
 └── package.json
 ```
 
@@ -213,6 +239,32 @@ next-branch/
 ```
 feature/your-feature → dev → main
 ```
+
+---
+
+## ⚡ Quick Start (For Contributors)
+
+Want to contribute? Get running in 60 seconds:
+
+```bash
+# 1. Fork & clone
+git clone https://github.com/YOUR_USERNAME/next-branch.git
+cd next-branch
+
+# 2. Install & setup
+npm install
+cp .env.example .env
+# Edit .env with your DATABASE_URL
+
+# 3. Database
+npx prisma migrate dev
+npx prisma generate
+
+# 4. Run
+npm run dev
+```
+
+Now create your feature branch and start building!
 
 ---
 
@@ -241,10 +293,11 @@ feature/your-feature → dev → main
 
 ## 📖 Documentation
 
-- **[shadcn/ui Integration](./docs/shadcn-setup.md)** — Component strategy & installation guide
-- **[Prisma Setup](./docs/prisma-setup.md)** — Database architecture & migration workflow
-- *(Coming soon)* Better Auth setup
-- *(Coming soon)* TanStack Query patterns
+Full integration guides available in respective feature branches:
+- `feature/shadcn-setup` — shadcn/ui configuration & component strategy
+- `feature/prisma-setup` — Database architecture & migration workflow
+
+Unified documentation coming soon in `/docs` folder.
 
 ---
 
