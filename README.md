@@ -1,244 +1,269 @@
-# Next Branch – shadcn/ui Integration
+# 🚀 next-branch
 
-This branch represents the **shadcn/ui setup baseline** for the `next-branch` repository.
+**Opinionated fullstack Next.js starter template for experimenting and integrating modern packages like Prisma, Better Auth, shadcn/ui, and TanStack.**
 
-It contains the initialized configuration for shadcn/ui with:
-
-- shadcn/ui v3.x (initialized via CLI)
-- Component infrastructure ready
-- New York style preset
-- Lucide React icons
-- CVA (Class Variance Authority)
-- Tailwind merge utilities
-
-**No components are installed yet.** This branch follows the principle of on-demand component installation.
+A production-grade architectural foundation designed with **branch-based evolution**, clean integration patterns, and enterprise-ready structure.
 
 ---
 
-## 🎯 Purpose of This Branch
+## 🎯 Philosophy
 
-The `feature/shadcn-setup` branch serves as:
+This is **not** a boilerplate dump.  
+This is **not** a component playground.  
+This is **not** a tutorial project.
 
-- **UI foundation baseline** – Ready for component installation
-- **Configuration reference** – Demonstrates shadcn/ui integration with Tailwind v4
-- **Staging area** – Will be merged to `dev` once validated
-- **Minimal approach** – Only essentials, no bloat
-
-This is **not** a UI showcase. This is an **architecture foundation**.
-
----
-
-## 📦 What's Included
-
-### Dependencies Added
-
-```json
-{
-  "class-variance-authority": "^0.7.1",
-  "clsx": "^2.1.1",
-  "lucide-react": "^0.564.0",
-  "tailwind-merge": "^3.4.1"
-}
-```
-
-### Configuration Files
-
-- `components.json` – shadcn/ui config (New York style, RSC enabled)
-- Path aliases configured (`@/components`, `@/lib`, `@/hooks`)
-- Tailwind CSS v4 integration
-- `globals.css` with CSS variables for theming
-
-### File Structure
-
-```
-.
-├── app/
-│   ├── globals.css          # Tailwind + shadcn variables
-│   ├── layout.tsx
-│   └── page.tsx
-├── components/              # Will contain shadcn components
-│   └── ui/                  # Component installation target
-├── lib/
-│   └── utils.ts             # cn() utility for class merging
-├── components.json          # shadcn/ui config
-└── package.json
-```
+**next-branch** is:
+- A **structured experimentation lab** for modern fullstack patterns
+- A **reusable foundation** for scalable SaaS applications
+- An **opinionated reference** for clean Next.js architecture
+- A **Git workflow blueprint** for disciplined feature integration
 
 ---
 
-## 🧠 Component Strategy
+## 🧱 Architecture Principles
 
-### ❌ What We DON'T Do
+1. **Modular but not fragmented** — Clear separation without over-engineering
+2. **Opinionated but extensible** — Strong defaults with customization paths
+3. **Minimal but powerful** — No unnecessary bloat, every dependency justified
+4. **Clean integration** — Each tool added with architectural intent
 
-- Install all 40+ components upfront
-- Create a "component playground"
-- Add unused dependencies
+---
 
-### ✅ What We DO
+## 🌿 Branch Strategy
 
-- Install components **on-demand** when feature requires it
-- Keep dependency tree minimal
-- Maintain clear separation between primitives and composed components
-
-### Recommended Installation Tiers
-
-**Tier 1: Core Primitives** (Install when needed for forms/layouts)
-```bash
-npx shadcn@latest add button
-npx shadcn@latest add input
-npx shadcn@latest add label
-npx shadcn@latest add form
-npx shadcn@latest add card
+```
+default     →  Pure Next.js baseline (zero abstraction)
+feature/*   →  Isolated integration per tool/feature
+dev         →  Controlled integration branch (current)
+main        →  Stable production snapshot
 ```
 
-**Tier 2: Navigation & Feedback** (Install for UX patterns)
-```bash
-npx shadcn@latest add dropdown-menu
-npx shadcn@latest add toast
-npx shadcn@latest add dialog
-```
+### Current Branch: `dev`
 
-**Tier 3: Advanced/Specific** (Install per feature branch)
-- `table` / `data-table` → When integrating TanStack Table
-- `select` / `checkbox` / `radio-group` → When building complex forms
-- `tabs` / `accordion` / `sheet` → When layout requires it
+This branch represents the **integration testing ground** where feature branches are merged, validated, and stabilized before reaching `main`.
+
+**What's integrated so far:**
+- ✅ **shadcn/ui** — Minimal component infrastructure (New York preset)
+- ✅ **Prisma ORM** — Type-safe database layer with PostgreSQL
+- 🚧 **Better Auth** — Coming soon
+- 🚧 **TanStack Query** — Coming soon
+- 🚧 **TanStack Table** — Coming soon
+
+---
+
+## 📦 Tech Stack
+
+### Core
+- **Next.js 16.1.6** — App Router, React Server Components
+- **React 19.2.3** — Latest stable release
+- **TypeScript 5** — Full type safety
+
+### UI Layer
+- **Tailwind CSS v4** — Next-generation CSS architecture
+- **shadcn/ui v3.8.4** — Composable UI primitives (on-demand installation)
+- **Lucide React** — Icon system
+- **Class Variance Authority** — Component variant management
+
+### Database Layer
+- **Prisma 7.4.0** — Type-safe ORM with migration system
+- **PostgreSQL** — Recommended production database
+- **@prisma/adapter-pg** — Connection pooling for serverless
 
 ---
 
 ## 🚀 Getting Started
 
-### Clone and Switch to This Branch
+### Prerequisites
+- Node.js 20+ (LTS recommended)
+- PostgreSQL database (local or hosted)
+- Git
 
+### 1. Clone Repository
 ```bash
 git clone https://github.com/rinosaputra/next-branch.git
 cd next-branch
-git checkout feature/shadcn-setup
+git checkout dev
 ```
 
-### Install Dependencies
-
+### 2. Install Dependencies
 ```bash
 npm install
 ```
 
-### Run Development Server
+### 3. Environment Setup
+Create a `.env` file:
+```env
+DATABASE_URL="postgresql://user:password@localhost:5432/next_branch_dev"
+```
 
+### 4. Database Setup
+```bash
+# Run migrations
+npx prisma migrate dev
+
+# Generate Prisma Client
+npx prisma generate
+
+# (Optional) Open Prisma Studio
+npx prisma studio
+```
+
+### 5. Run Development Server
 ```bash
 npm run dev
 ```
 
-Open: [http://localhost:3000](http://localhost:3000)
+Open [http://localhost:3000](http://localhost:3000)
 
-### Install Components (Example)
+---
 
+## 🧠 Component Philosophy (shadcn/ui)
+
+### ❌ What We DON'T Do
+- Install all 40+ components upfront
+- Create a "component showcase"
+- Add unused dependencies
+
+### ✅ What We DO
+- Install components **on-demand** when features require them
+- Keep dependency tree minimal
+- Maintain clear separation between primitives and composed components
+
+### Installing Components
 ```bash
-# Install button component
+# Install individual components as needed
 npx shadcn@latest add button
+npx shadcn@latest add form
+npx shadcn@latest add card
 
-# Install multiple components
-npx shadcn@latest add button input card
+# Or multiple at once
+npx shadcn@latest add button input label
 ```
 
-Components will be installed to `components/ui/`.
+Components are installed to `components/ui/` and remain under your control.
 
 ---
 
-## 🌱 Branch Workflow
+## 🗄️ Database Architecture (Prisma)
 
+### Schema Philosophy
+- **Relational integrity** enforced at database level
+- **Type-safe queries** without manual typing
+- **Migration-first approach** — version-controlled schema evolution
+- **Prepared for scale** — RBAC, audit logs, multi-tenant patterns
+
+### Key Commands
+```bash
+# Create and apply migrations
+npx prisma migrate dev --name descriptive_name
+
+# Reset database (dev only)
+npx prisma migrate reset
+
+# Deploy migrations (production)
+npx prisma migrate deploy
 ```
-default (baseline)
-    ↓
-feature/shadcn-setup (current)
-    ↓
-dev (integration)
-    ↓
-main (stable)
-```
 
-### Next Steps for This Branch
+### Example Usage
+```typescript
+// app/api/users/route.ts
+import { prisma } from '@/lib/prisma';
 
-1. ✅ shadcn/ui initialized
-2. ⏳ Install **Tier 1** components (optional validation)
-3. ⏳ Create simple demo page (optional)
-4. ⏳ Merge to `dev`
-
----
-
-## 🔧 Configuration Details
-
-### Style Preset
-
-**New York** – Modern, minimal, refined aesthetic
-
-- Clean component design
-- Subtle shadows and borders
-- Professional look & feel
-
-### Path Aliases
-
-```json
-{
-  "@/components": "./components",
-  "@/lib": "./lib",
-  "@/ui": "./components/ui",
-  "@/hooks": "./hooks"
+export async function GET() {
+  const users = await prisma.user.findMany();
+  return Response.json(users);
 }
 ```
 
-### Tailwind Integration
+---
 
-- **Tailwind CSS v4** (next-gen architecture)
-- CSS variables for theming
-- `neutral` base color
-- `tw-animate-css` for animations
+## 📁 Project Structure
+
+```
+next-branch/
+├── app/                    # Next.js App Router
+│   ├── globals.css         # Tailwind + shadcn theme variables
+│   ├── layout.tsx          # Root layout
+│   └── page.tsx            # Homepage
+├── components/
+│   └── ui/                 # shadcn components (installed on-demand)
+├── lib/
+│   ├── prisma.ts           # Prisma Client singleton
+│   └── utils.ts            # Utility functions (cn, etc.)
+├── prisma/
+│   ├── schema.prisma       # Database schema
+│   └── migrations/         # Version-controlled migrations
+├── components.json         # shadcn/ui configuration
+├── next-branch.json        # Package metadata for npm
+└── package.json
+```
 
 ---
 
-## 📚 Tech Stack (This Branch)
+## 🛠️ Development Workflow
 
-- Next.js 16.1.6 (App Router)
-- React 19.2.3
-- TypeScript 5
-- Tailwind CSS v4
-- shadcn/ui v3.8.4
-- Lucide React (icons)
-- Class Variance Authority
-- Radix UI (via shadcn components)
+### Adding a New Feature
+1. Create a feature branch: `git checkout -b feature/your-feature`
+2. Implement changes following architectural patterns
+3. Test thoroughly in isolation
+4. Open PR to `dev` for integration testing
+5. After validation, merge to `main`
 
----
-
-## 🧠 About Next Branch
-
-`next-branch` is a **production-grade Next.js fullstack starter architecture** designed with:
-
-- **Branch-based evolution** – Feature isolation via Git branches
-- **Opinionated but extensible** – Clear patterns, room to customize
-- **Minimal but powerful** – No unnecessary bloat
-- **Enterprise-ready** – Built for scale from day one
-
-Each branch represents a stage of stack integration, following a disciplined merge strategy.
+### Branch Lifecycle
+```
+feature/your-feature → dev → main
+```
 
 ---
 
-## 📖 Related Branches
+## 🔗 Roadmap
 
-- `default` → Pure Next.js baseline
-- `dev` → Integration branch (all features merge here first)
-- `main` → Stable production snapshot
-- `feature/prisma` → Database layer integration (planned)
-- `feature/auth` → Better Auth integration (planned)
+### ✅ Completed
+- Next.js baseline setup
+- Tailwind CSS v4 integration
+- shadcn/ui infrastructure
+- Prisma ORM setup with PostgreSQL
+
+### 🚧 In Progress
+- Better Auth integration (session-based + OAuth)
+- TanStack Query for server state management
+- TanStack Table for data-heavy UIs
+
+### 🔮 Planned
+- File upload strategy (S3-compatible)
+- Multi-tenant architecture patterns
+- RBAC implementation
+- Audit logging system
+- Email service integration
+- Cache strategy (Redis)
+
+---
+
+## 📖 Documentation
+
+- **[shadcn/ui Integration](./docs/shadcn-setup.md)** — Component strategy & installation guide
+- **[Prisma Setup](./docs/prisma-setup.md)** — Database architecture & migration workflow
+- *(Coming soon)* Better Auth setup
+- *(Coming soon)* TanStack Query patterns
 
 ---
 
 ## 🤝 Contributing
 
-This is an open-source reference architecture.
+This is an **open-source reference architecture**.
 
-If you use this as a starter:
+### How to Contribute
+1. Fork the repository
+2. Create a feature branch following our naming convention
+3. Implement changes with clear architectural intent
+4. Submit PR with detailed description
+5. Ensure all tests pass and docs are updated
 
-- Fork and customize freely
-- Share improvements via PR
-- Report architectural issues
+### Contribution Guidelines
+- Follow the established architectural philosophy
+- Keep integrations clean and justified
+- Document decisions in relevant README files
+- Maintain backward compatibility where possible
 
 ---
 
@@ -248,11 +273,20 @@ MIT License
 
 Copyright (c) 2026 Rino Saputra
 
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED.
+
 ---
 
 ## 🔗 Links
 
-- [Repository](https://github.com/rinosaputra/next-branch)
-- [Issues](https://github.com/rinosaputra/next-branch/issues)
-- [shadcn/ui Docs](https://ui.shadcn.com)
-- [Next.js Docs](https://nextjs.org/docs)
+- **Repository**: [github.com/rinosaputra/next-branch](https://github.com/rinosaputra/next-branch)
+- **Issues**: [github.com/rinosaputra/next-branch/issues](https://github.com/rinosaputra/next-branch/issues)
+- **Discussions**: [github.com/rinosaputra/next-branch/discussions](https://github.com/rinosaputra/next-branch/discussions)
+
+---
+
+**Built with discipline. Designed for scale. Open for all.**
