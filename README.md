@@ -1,4 +1,4 @@
-# 🔐 feature/auth-ui
+# 🔐 feature/shadcn-auth-ui
 
 **Isolated integration branch for production-grade Authentication UI**
 
@@ -132,7 +132,7 @@ This branch **merges** multiple feature branches:
 ```
 feature/prisma-setup ──────┐
 feature/better-auth-setup ─┤
-feature/shadcn-setup ──────┼─→ feature/auth-ui
+feature/shadcn-setup ──────┼─→ feature/shadcn-auth-ui
 feature/form-validation ───┘
 ```
 
@@ -460,7 +460,7 @@ This branch integrates with:
 ```
 feature/prisma-setup ──────┐
 feature/better-auth-setup ─┤
-feature/shadcn-setup ──────┼─→ feature/auth-ui ← CURRENT
+feature/shadcn-setup ──────┼─→ feature/shadcn-auth-ui ← CURRENT
 feature/form-validation ───┘        ↓
                                    dev → main
 ```
