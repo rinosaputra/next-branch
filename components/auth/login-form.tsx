@@ -18,6 +18,7 @@ import Image from "next/image"
 import { Controller, useForm } from "react-hook-form"
 import { authNavigationLinks, defaultRedirectURL, formFieldConfig, oauthProviders } from "./const"
 import Link from "next/link"
+import { toast } from "sonner"
 
 // variable for title, description, submit button, oauth providers, and navigation links
 const config = {
@@ -28,7 +29,7 @@ const config = {
   },
   oauth: oauthProviders,
   field: formFieldConfig,
-  signup: authNavigationLinks.signup,
+  signup: authNavigationLinks.register,
   forgotPassword: authNavigationLinks.forgotPassword,
 }
 
@@ -50,6 +51,10 @@ export default function LoginForm() {
         rememberMe: data.rememberMe,
         callbackURL: defaultRedirectURL,
       })
+      if(response.error) {
+        throw new Error(response.error?.message || "Login failed")
+      }
+      return response
     }
   })
 
@@ -57,7 +62,11 @@ export default function LoginForm() {
     if (process.env.NODE_ENV === "development") {
       console.log("Login data:", data)
     }
-    // TODO: Implement your login logic here
+    toast.promise(signIn.mutateAsync(data), {
+      loading: "Logging in...",
+      success: "Logged in successfully!",
+      error: (err) => err.message || "Login failed",
+    })
   }
 
   return <form className="flex flex-col gap-6" onSubmit={form.handleSubmit(onSubmit)}>
@@ -136,9 +145,9 @@ export default function LoginForm() {
         </Button>
         <FieldDescription className="text-center">
           {config.signup.label}{" "}
-          <a href="#" className="underline underline-offset-4">
+          <Link href={config.signup.href} className="underline underline-offset-4">
             {config.signup.linkLabel}
-          </a>
+          </Link>
         </FieldDescription>
       </Field>
     </FieldGroup>

@@ -13,15 +13,20 @@ export const oauthProviders = {
 
 // Variable for navigation links (auth)
 export const authNavigationLinks = {
-  signup: {
+  register: {
     label: "Don't have an account?",
     linkLabel: "Sign up",
-    href: "/signup",
+    href: "/register",
   },
   forgotPassword: {
     label: "Forgot your password?",
     linkLabel: "Reset it",
     href: "/forgot-password",
+  },
+  login: {
+    label: "Already have an account?",
+    linkLabel: "Login",
+    href: "/login",
   },
 }
 
@@ -39,7 +44,7 @@ export const formFieldConfig = {
     label: "Password",
     placeholder: "Enter your password",
   },
-  repassword: {
+  confirmPassword: {
     label: "Confirm Password",
     placeholder: "Re-enter your password",
   },
