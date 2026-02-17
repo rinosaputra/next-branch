@@ -10,8 +10,10 @@ import {
   FieldSeparator,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
+import { auth } from "@/lib/auth"
 import { LoginInput, loginSchema } from "@/lib/validations/auth"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useMutation } from "@tanstack/react-query"
 import Image from "next/image"
 import { Controller, useForm } from "react-hook-form"
 
@@ -52,6 +54,19 @@ export default function LoginForm() {
       email: "",
       password: "",
     },
+  })
+
+  // Sign In with mutation tanstack query
+  const signIn = useMutation({
+    mutationFn: async (data: LoginInput) => {
+      const response = auth.api.signInEmail({
+        body: {
+          email: data.email,
+          password: data.password,
+          rememberMe: data.rememberMe
+        }
+      })
+    }
   })
 
   const onSubmit = (data: LoginInput) => {
