@@ -10,41 +10,26 @@ import {
   FieldSeparator,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { auth } from "@/lib/auth"
+import { authClient } from "@/lib/auth-client"
 import { LoginInput, loginSchema } from "@/lib/validations/auth"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import Image from "next/image"
 import { Controller, useForm } from "react-hook-form"
+import { authNavigationLinks, defaultRedirectURL, formFieldConfig, oauthProviders } from "./const"
+import Link from "next/link"
 
-// This is a mock login form component. You can replace it with your own implementation.
+// variable for title, description, submit button, oauth providers, and navigation links
 const config = {
   title: "Login to your account",
   description: "Enter your email below to login to your account",
-  field: {
-    email: {
-      label: "Email",
-      placeholder: "m@example.com",
-    },
-    password: {
-      label: "Password",
-      placeholder: "Enter your password",
-    },
-  },
   submitButton: {
     label: "Login",
   },
-  oauth: {
-    label: "Or continue with",
-    google: {
-      label: "Login with Google",
-      image: "/images/google.svg",
-    },
-  },
-  signup: {
-    label: "Don't have an account?",
-    linkLabel: "Sign up",
-  },
+  oauth: oauthProviders,
+  field: formFieldConfig,
+  signup: authNavigationLinks.signup,
+  forgotPassword: authNavigationLinks.forgotPassword,
 }
 
 export default function LoginForm() {
@@ -59,12 +44,11 @@ export default function LoginForm() {
   // Sign In with mutation tanstack query
   const signIn = useMutation({
     mutationFn: async (data: LoginInput) => {
-      const response = auth.api.signInEmail({
-        body: {
-          email: data.email,
-          password: data.password,
-          rememberMe: data.rememberMe
-        }
+      const response = await authClient.signIn.email({
+        email: data.email,
+        password: data.password,
+        rememberMe: data.rememberMe,
+        callbackURL: defaultRedirectURL,
       })
     }
   })
@@ -113,12 +97,12 @@ export default function LoginForm() {
           <Field data-invalid={fieldState.invalid}>
             <div className="flex items-center">
               <FieldLabel htmlFor="password">{config.field.password.label}</FieldLabel>
-              <a
-                href="#"
+              <Link
+                href={config.forgotPassword.href}
                 className="ml-auto text-sm underline-offset-4 hover:underline"
               >
-                Forgot your password?
-              </a>
+                {config.forgotPassword.label}
+              </Link>
             </div>
             <Input
               {...field}
@@ -139,7 +123,7 @@ export default function LoginForm() {
       </Field>
       <FieldSeparator>{config.oauth.label}</FieldSeparator>
       <Field>
-        <Button variant="outline" type="button">
+        <Button variant="outline" type="button" disabled>
           <Image
             className="dark:invert"
             src={config.oauth.google.image}
