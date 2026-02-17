@@ -1,346 +1,167 @@
-# 🎨 feature/shadcn-setup
+# 🔔 feature/sonner
 
-**Isolated integration branch for shadcn/ui primitives**
+**Isolated integration branch for Sonner toast notifications**
 
-This branch demonstrates a **minimal, production-grade shadcn/ui setup** for the **next-branch** fullstack architecture. It focuses on selective component installation, avoiding UI bloat, and maintaining architectural clarity.
+This branch integrates **Sonner**, a toast notification component from the shadcn/ui ecosystem, for non-blocking user feedback.
 
 ---
 
 ## 🎯 Purpose
 
-This branch is part of the **branch-based evolution strategy** used in `next-branch`. It establishes shadcn/ui foundation by:
-
-- Configuring shadcn/ui CLI and tooling
-- Installing **only essential UI primitives** (no full component dump)
-- Establishing component usage patterns
-- Preparing foundation for auth UI and data-heavy interfaces
-- Demonstrating "minimal but powerful" UI philosophy
-
-**This is not a permanent branch.**
-Once validated, it will be merged into `dev` as part of the controlled integration process.
+Add global toast notification capability for:
+- ✅ Background operations (file uploads, sync)
+- ✅ Async operation feedback
+- ✅ Real-time notifications
+- ❌ NOT for inline form validation (use `<FormMessage />`)
+- ❌ NOT for auth errors (use `<Alert />`)
 
 ---
 
 ## 📦 What's Included
 
-### Core Setup
-- **shadcn/ui CLI** configuration
-- **Tailwind CSS v4** integration (already present)
-- **Component installation strategy** (selective, justified)
-- **TypeScript-first** component patterns
-- **Accessibility** built-in (via Radix UI primitives)
+### shadcn Component Added
 
-### Installed Components (Tier 1: Foundational Primitives)
+| Component | Type | Purpose |
+|-----------|------|---------|
+| `sonner` | Toast | Non-blocking notifications |
 
-| Component | Purpose | Justification |
-|-----------|---------|---------------|
-| `button` | Primary actions | Universal need across all features |
-| `input` | Text fields | Form foundation (auth, data entry) |
-| `label` | Form labels | Accessibility requirement |
-| `card` | Content containers | Layout primitive for sections |
-| `alert` | Feedback messages | Error/success state communication |
+**Installation method:** shadcn CLI (`npx shadcn@latest add sonner`)
 
-**Total:** 5 components
-**Approach:** Install additional components **only when features explicitly require them**
+### Dependencies Added
 
----
-
-## 🚫 NOT Installed (By Design)
-
-shadcn/ui offers 50+ components. We explicitly **DO NOT** install:
-
-- ❌ All other components (accordion, avatar, badge, calendar, checkbox, etc.)
-- ❌ Complex patterns (command palette, data tables, etc.)
-- ❌ Experimental components
-
-**Why?**
-- Avoid UI bloat
-- Maintain architectural focus
-- Install on demand (as features need them)
-- Keep bundle size minimal
-- Prevent "component showcase" anti-pattern
-
----
-
-## 🚀 Getting Started
-
-### 1. Install Dependencies
-```bash
-npm install
-```
-
-### 2. Verify shadcn/ui Configuration
-Check `components.json`:
 ```json
 {
-  "$schema": "https://ui.shadcn.com/schema.json",
-  "style": "new-york",
-  "rsc": true,
-  "tsx": true,
-  "tailwind": {
-    "config": "tailwind.config.ts",
-    "css": "app/globals.css",
-    "baseColor": "zinc",
-    "cssVariables": true
-  },
-  "aliases": {
-    "components": "@/components",
-    "utils": "@/lib/utils"
+  "dependencies": {
+    "sonner": "^1.x.x",
+    "next-themes": "^0.x.x"
   }
 }
 ```
 
-### 3. View Installed Components
+---
+
+## 🚀 Installation
+
 ```bash
-ls components/ui
-# Output: button.tsx, input.tsx, label.tsx, card.tsx, alert.tsx
-```
+# Install via shadcn CLI
+npx shadcn@latest add sonner
 
-### 4. Run Development Server
-```bash
-npm run dev
-```
-
----
-
-## 🧱 Architecture Decisions
-
-### Why shadcn/ui?
-- **Not a component library** – copy/paste approach, full ownership
-- **Built on Radix UI** – accessibility and primitives built-in
-- **Tailwind-native** – consistent with existing styling
-- **TypeScript-first** – type safety enforced
-- **Customizable** – modify components without fighting library constraints
-
-### Why Minimal Component Set?
-- **Avoid premature abstraction** – install when needed
-- **Bundle size discipline** – only ship what's used
-- **Architectural clarity** – this is not a UI showcase
-- **Long-term maintainability** – fewer components = less maintenance
-- **Scalability** – easy to add more later with justification
-
-### Component Selection Criteria
-A component is installed ONLY if:
-1. ✅ Used by multiple features (not one-off)
-2. ✅ Part of foundational patterns (auth, forms, layout)
-3. ✅ Cannot be easily built with existing primitives
-4. ✅ Provides accessibility benefits (Radix UI primitives)
-
----
-
-## 📁 Directory Structure
-
-```
-/components
-  └── ui/                    # shadcn/ui components
-      ├── button.tsx         # Primary action component
-      ├── input.tsx          # Text input field
-      ├── label.tsx          # Form label (accessibility)
-      ├── card.tsx           # Content container
-      └── alert.tsx          # Feedback message
-
-/lib
-  └── utils.ts               # cn() helper (Tailwind class merging)
-
-/app
-  └── globals.css            # Tailwind + shadcn/ui CSS variables
-
-components.json              # shadcn/ui configuration
-tailwind.config.ts           # Tailwind v4 config
+# This creates:
+# - components/ui/sonner.tsx
+# - Installs: sonner, next-themes
 ```
 
 ---
 
-## 🧪 Component Usage Examples
+## 🔧 Integration
 
-### Button
+### Root Layout
+
 ```tsx
-import { Button } from "@/components/ui/button"
+// app/layout.tsx
+import { Toaster } from "@/components/ui/sonner"
 
-<Button variant="default">Sign In</Button>
-<Button variant="destructive">Delete</Button>
-<Button variant="outline">Cancel</Button>
-<Button variant="ghost">Learn More</Button>
-```
-
-### Input + Label
-```tsx
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-
-<div>
-  <Label htmlFor="email">Email</Label>
-  <Input id="email" type="email" placeholder="you@example.com" />
-</div>
-```
-
-### Card
-```tsx
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
-
-<Card>
-  <CardHeader>
-    <CardTitle>Welcome</CardTitle>
-  </CardHeader>
-  <CardContent>
-    <p>Your content here</p>
-  </CardContent>
-</Card>
-```
-
-### Alert
-```tsx
-import { Alert, AlertDescription } from "@/components/ui/alert"
-
-<Alert>
-  <AlertDescription>
-    Your password has been reset successfully.
-  </AlertDescription>
-</Alert>
-
-<Alert variant="destructive">
-  <AlertDescription>
-    Invalid credentials. Please try again.
-  </AlertDescription>
-</Alert>
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body>
+        <main>{children}</main>
+        <Toaster />
+      </body>
+    </html>
+  )
+}
 ```
 
 ---
 
-## 🔄 Adding More Components (When Needed)
+## 🧪 Usage Examples
 
-### Process
-1. **Identify need** – feature explicitly requires component
-2. **Justify** – explain why existing primitives are insufficient
-3. **Install** – use shadcn CLI
-4. **Document** – update this README with justification
-5. **Commit** – clear message explaining WHY component was added
+### Basic Toast
 
-### Example
-```bash
-# Future: Auth UI needs checkbox for "Remember me"
-npx shadcn@latest add checkbox
+```tsx
+import { toast } from "sonner"
 
-# Commit with justification
-git commit -m "shadcn: add checkbox component
+toast("Event has been created.")
+```
 
-Justification: Required for 'Remember me' functionality in login form.
-Cannot be built with existing primitives while maintaining accessibility."
+### Toast Types
+
+```tsx
+toast.success("Operation successful!")
+toast.error("Something went wrong")
+toast.warning("Warning message")
+toast.info("Information")
+toast.loading("Processing...")
+```
+
+### Promise-based Toast
+
+```tsx
+toast.promise(
+  fetch('/api/upload').then(res => res.json()),
+  {
+    loading: 'Uploading...',
+    success: 'Upload complete!',
+    error: 'Upload failed',
+  }
+)
+```
+
+### With Description
+
+```tsx
+toast.success("Profile updated", {
+  description: "Your changes have been saved successfully.",
+})
+```
+
+---
+
+## 🎨 Configuration
+
+### Position
+
+```tsx
+<Toaster position="top-right" />
+// Options: top-left, top-center, top-right, bottom-left, bottom-center, bottom-right
+```
+
+### Rich Colors
+
+```tsx
+<Toaster richColors />
+// Enables colored variants for success, error, etc.
+```
+
+### Close Button
+
+```tsx
+<Toaster closeButton />
+// Adds X button to dismiss
 ```
 
 ---
 
 ## 🔗 Integration Points
 
-This branch is designed to integrate with:
+Used by:
+- **File Upload** (future) – Upload progress toasts
+- **Real-time Sync** (future) – Background sync notifications
+- **Data Operations** (future) – CRUD operation feedback
 
-- **Better Auth** (`feature/better-auth-setup`) – auth forms UI
-- **TanStack Query** (future) – loading states, error handling
-- **TanStack Table** (future) – data display components
-- **Auth UI** (`feature/auth-ui`) – login/register forms
-
----
-
-## 🛡️ Best Practices Implemented
-
-✅ **Selective installation** (not full component dump)
-✅ **Accessibility-first** (Radix UI primitives)
-✅ **Type-safe** (full TypeScript support)
-✅ **Customizable** (components in repo, not node_modules)
-✅ **Tailwind-native** (consistent styling strategy)
-✅ **CSS variables** (theme customization ready)
+NOT used for:
+- ❌ Form validation errors → Use `<FormMessage />`
+- ❌ Auth errors → Use inline `<Alert />`
+- ❌ Page-level errors → Use error boundary
 
 ---
 
-## 🚧 Known Limitations
+## 📚 References
 
-- Form validation components not installed yet (add `form` when integrating react-hook-form)
-- Data display components not included (add `table`, `badge` when building data views)
-- Modal/dialog patterns not configured (add `dialog` when needed)
-- Toast notifications not set up (add `toast` when implementing global feedback)
+- [Sonner Documentation](https://sonner.emilkowal.ski)
+- [shadcn/ui Sonner](https://ui.shadcn.com/docs/components/sonner)
 
 ---
 
-## 📚 Component Roadmap
-
-### Future Additions (Install When Needed)
-
-| Tier | Components | When to Add |
-|------|-----------|-------------|
-| **Tier 2: Forms** | `form`, `checkbox`, `radio-group`, `select`, `textarea` | When building auth UI or data entry forms |
-| **Tier 3: Data** | `table`, `badge`, `avatar`, `separator` | When building data-heavy interfaces |
-| **Tier 4: Interactions** | `dialog`, `dropdown-menu`, `popover`, `toast` | When adding modals, menus, notifications |
-| **Tier 5: Advanced** | `command`, `calendar`, `date-picker`, `tabs` | Only if explicitly required by features |
-
-**Principle:** Install incrementally, justify each addition.
-
----
-
-## 📖 References
-
-- [shadcn/ui Documentation](https://ui.shadcn.com)
-- [Radix UI Primitives](https://www.radix-ui.com/primitives)
-- [Tailwind CSS v4](https://tailwindcss.com)
-- [Accessibility Guidelines (WCAG)](https://www.w3.org/WAI/WCAG21/quickref/)
-
----
-
-## 🧭 Branch Lifecycle
-
-```
-default → feature/shadcn-setup → dev → main
-```
-
-**Current Status:** 🟡 Isolated integration branch
-**Next Step:** Validation & merge into `dev` after component testing
-**End Goal:** Stable release in `main` as part of foundational UI stack
-
----
-
-## 📝 Contributing to This Branch
-
-If working on this branch:
-
-1. **Only add components when explicitly needed** – avoid bulk installation
-2. **Justify each addition in commit message** – explain WHY component is required
-3. **Update this README** when adding new components
-4. **Test accessibility** – ensure keyboard navigation and screen reader support
-5. **Keep components minimal** – resist customization bloat
-
-### Commit Message Format
-```bash
-git commit -m "shadcn: add <component> for <use-case>
-
-Justification: <why existing primitives are insufficient>
-Use case: <which feature requires this component>"
-```
-
----
-
-## 🎯 Success Criteria
-
-This branch is ready to merge when:
-
-- ✅ Tier 1 components installed and tested
-- ✅ Component usage patterns documented
-- ✅ Accessibility verified (keyboard nav, screen readers)
-- ✅ Integration with Tailwind CSS v4 confirmed
-- ✅ TypeScript types working correctly
-- ✅ No UI bloat (only essential components)
-
----
-
-## 🔥 Philosophy Reminder
-
-> **"This is not a UI showcase repo."**
-> **"This is an architecture foundation."**
-
-shadcn/ui is a **tool**, not the focus.
-We use it to enable **production-grade features**, not to demonstrate UI capabilities.
-
-Every component must earn its place through **real feature needs**, not hypothetical use cases.
-
----
-
-**Part of the [next-branch](https://github.com/rinosaputra/next-branch) architecture.**
-**Built with discipline. Designed for scale.**
+**Part of [next-branch](https://github.com/rinosaputra/next-branch) architecture.**
