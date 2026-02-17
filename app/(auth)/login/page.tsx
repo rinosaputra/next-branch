@@ -4,6 +4,8 @@ import { createMetadata } from "@/lib/metadata"
 export const metadata = createMetadata({
   title: "Login",
   description: "Sign in to your account",
+  path: "/login",
+  noIndex: true,
 })
 
 const AuthLoginPage = LoginForm

@@ -20,6 +20,7 @@ import { useRouter } from "next/navigation"
 import { Controller, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { authNavigationLinks, defaultRedirectURL, formFieldConfig, oauthProviders } from "./const"
+import { InputPassword } from "./input-password"
 
 // Variable for title, description, submit button, oauth providers, and navigation links
 const config = {
@@ -71,6 +72,7 @@ export default function RegisterForm() {
     toast.promise(signUp.mutateAsync(data), {
       loading: "Creating account...",
       success: () => {
+        form.reset() // Clear form after success
         router.push(config.login.href)
         return "Account created successfully! Please check your email to verify your account."
       },
@@ -147,13 +149,12 @@ export default function RegisterForm() {
               <FieldLabel htmlFor={field.name}>
                 {config.field.password.label}
               </FieldLabel>
-              <Input
+              <InputPassword
                 {...field}
                 id={field.name}
                 aria-invalid={fieldState.invalid}
                 placeholder={config.field.password.placeholder}
                 autoComplete="new-password"
-                type="password"
                 disabled={signUp.isPending}
               />
               {fieldState.invalid && (
@@ -172,13 +173,12 @@ export default function RegisterForm() {
               <FieldLabel htmlFor={field.name}>
                 {config.field.confirmPassword.label}
               </FieldLabel>
-              <Input
+              <InputPassword
                 {...field}
                 id={field.name}
                 aria-invalid={fieldState.invalid}
                 placeholder={config.field.confirmPassword.placeholder}
                 autoComplete="new-password"
-                type="password"
                 disabled={signUp.isPending}
               />
               {fieldState.invalid && (

@@ -19,6 +19,7 @@ import { Controller, useForm } from "react-hook-form"
 import { authNavigationLinks, defaultRedirectURL, formFieldConfig, oauthProviders } from "./const"
 import Link from "next/link"
 import { toast } from "sonner"
+import { InputPassword } from "./input-password"
 
 // variable for title, description, submit button, oauth providers, and navigation links
 const config = {
@@ -51,7 +52,7 @@ export default function LoginForm() {
         rememberMe: data.rememberMe,
         callbackURL: defaultRedirectURL,
       })
-      if(response.error) {
+      if (response.error) {
         throw new Error(response.error?.message || "Login failed")
       }
       return response
@@ -64,7 +65,10 @@ export default function LoginForm() {
     }
     toast.promise(signIn.mutateAsync(data), {
       loading: "Logging in...",
-      success: "Logged in successfully!",
+      success: () => {
+        form.reset() // Clear form after success
+        return "Logged in successfully"
+      },
       error: (err) => err.message || "Login failed",
     })
   }
@@ -92,6 +96,7 @@ export default function LoginForm() {
               placeholder={config.field.email.placeholder}
               autoComplete="off"
               type="email"
+              disabled={signIn.isPending}
             />
             {fieldState.invalid && (
               <FieldError errors={[fieldState.error]} />
@@ -113,13 +118,13 @@ export default function LoginForm() {
                 {config.forgotPassword.label}
               </Link>
             </div>
-            <Input
+            <InputPassword
               {...field}
               id={field.name}
               aria-invalid={fieldState.invalid}
               placeholder={config.field.password.placeholder}
               autoComplete="off"
-              type="password"
+              disabled={signIn.isPending}
             />
             {fieldState.invalid && (
               <FieldError errors={[fieldState.error]} />

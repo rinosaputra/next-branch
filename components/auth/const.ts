@@ -27,6 +27,7 @@ export const authNavigationLinks = {
     label: "Already have an account?",
     linkLabel: "Login",
     href: "/login",
+    backLabel: "Remember your password?", // NEW for forgot password
   },
 }
 
