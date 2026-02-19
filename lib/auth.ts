@@ -10,3 +10,8 @@ export const auth = betterAuth({
     enabled: true,
   }
 })
+
+type Auth = typeof auth.$Infer.Session
+
+export type User = Auth['user']
+export type Session = Auth['session']
