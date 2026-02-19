@@ -2,7 +2,7 @@
 
 **Isolated integration branch for email infrastructure**
 
-This branch establishes **production-grade email sending capabilities** for the **next-branch** fullstack architecture. It focuses exclusively on infrastructure—email client configuration, sending utility, and React Email primitives—without implementing specific templates.
+This branch establishes **production-grade email sending capabilities** for the **next-branch** fullstack architecture. It focuses exclusively on infrastructure—email client configuration, sending utility, React Email primitives with **Tailwind CSS support**—without implementing specific templates.
 
 ---
 
@@ -12,9 +12,10 @@ This branch is part of the **branch-based evolution strategy** used in `next-bra
 
 - **Email service integration** (Resend)
 - **Type-safe sending utility** with development & production modes
-- **React Email support** for email-compatible components
+- **React Email + Tailwind CSS** for email-compatible components
+- **Automatic inline style conversion** (Tailwind → email-safe CSS)
 - **Centralized email client** (single instance pattern)
-- **Development-friendly testing** (console logging without API calls)
+- **Development-friendly testing** (console logging + live preview)
 
 **This is infrastructure only.**
 Email templates are implemented in feature branches that need them (`feature/auth-ui`, `feature/notifications`, etc.).
@@ -33,6 +34,7 @@ Once validated, it will be merged into `dev` and enable email capabilities acros
 | `resend` | ^4.x.x | Email sending service (Next.js native) |
 | `react-email` | ^3.x.x | Email template development & preview |
 | `@react-email/components` | ^0.0.x | Email-safe React primitives |
+| `@react-email/tailwind` | ^0.0.x | **Tailwind CSS for emails** |
 | `@react-email/render` (dev) | ^1.x.x | Server-side React → HTML rendering |
 
 ### Infrastructure Components
@@ -41,7 +43,7 @@ Once validated, it will be merged into `dev` and enable email capabilities acros
 |------|---------|
 | `/lib/email/client.ts` | Resend client instance |
 | `/lib/email/send.ts` | Type-safe email sending utility |
-| `/lib/email/components/email-layout.tsx` | Base email layout (optional) |
+| `/lib/email/components/email-layout.tsx` | **Base email layout with Tailwind** |
 | `/emails/` | Preview directory (development only) |
 
 ### Configuration
@@ -66,6 +68,7 @@ This installs:
 - `resend` – Email sending service
 - `react-email` – Template development tools
 - `@react-email/components` – Email-safe React primitives
+- `@react-email/tailwind` – **Tailwind CSS for emails**
 - `@react-email/render` – Server-side rendering
 
 ### 2. Get Resend API Key
@@ -123,20 +126,24 @@ Opens email preview at `http://localhost:3000` with hot reload.
 - **AWS SES:** Steep learning curve, complex IAM setup
 - **Postmark:** More expensive, less Next.js focused
 
-#### **React Email for Templates**
+---
+
+#### **React Email + Tailwind for Templates**
 
 | Feature | Benefit |
 |---------|---------|
 | **Email-Safe Components** | Guaranteed compatibility with all email clients |
+| **Tailwind CSS Support** | **Use Tailwind classes, auto-converted to inline styles** |
 | **Live Preview** | Instant feedback during development |
 | **Type-Safe** | Catch errors at compile time |
 | **Automatic Inline CSS** | No manual style inlining needed |
-| **Industry Standard** | Used by Stripe, Twilio, Notion |
+| **Industry Standard** | Used by Stripe, Twilio, Notion, Vercel |
 
 **vs Alternatives:**
 - **Plain HTML/CSS:** Hard to maintain, no type safety, manual inline styles
 - **Plain React:** May break in email clients, no preview server
 - **Template strings:** No reusability, no component logic
+- **Raw Tailwind:** Requires manual inline conversion (React Email does this automatically)
 
 ---
 
@@ -148,8 +155,8 @@ Opens email preview at `http://localhost:3000` with hot reload.
 Infrastructure (this branch)
 ├── Email client (Resend)
 ├── Sending utility (sendEmail)
-├── React Email rendering
-└── Base layout (optional)
+├── React Email + Tailwind rendering
+└── Base layout with Tailwind support
 
 Feature Branches (consumers)
 ├── Specific templates (verification, reset, etc.)
@@ -161,7 +168,7 @@ Feature Branches (consumers)
 - ✅ **Single responsibility** – Infrastructure focused
 - ✅ **Clear ownership** – Templates owned by features
 - ✅ **No bloat** – Only foundational components
-- ✅ **Reusable** – Any feature can use `sendEmail()`
+- ✅ **Reusable** – Any feature can use `sendEmail()` + Tailwind
 - ✅ **Maintainable** – Changes isolated to infrastructure
 
 ---
@@ -174,7 +181,7 @@ Feature Branches (consumers)
       ├── client.ts                    # Resend client instance
       ├── send.ts                      # Email sending utility
       └── components/
-          └── email-layout.tsx         # Base layout (optional)
+          └── email-layout.tsx         # Base layout with Tailwind
 
 /emails                                # Preview directory (dev only)
   └── .gitkeep                         # Keep directory in Git
@@ -275,7 +282,7 @@ export async function sendEmail({ to, subject, html, react }: SendEmailOptions) 
 
 ---
 
-### 3. Base Email Layout (Optional Infrastructure)
+### 3. Base Email Layout with Tailwind (Infrastructure)
 
 ```tsx
 // lib/email/components/email-layout.tsx
@@ -288,6 +295,7 @@ import {
   Section,
   Text,
   Hr,
+  Tailwind,
 } from '@react-email/components'
 
 interface EmailLayoutProps {
@@ -295,33 +303,65 @@ interface EmailLayoutProps {
   preview?: string
 }
 
+/**
+ * Base email layout with Tailwind CSS support
+ *
+ * Automatically converts Tailwind classes to inline styles
+ * for email client compatibility.
+ *
+ * @example
+ * ```tsx
+ * <EmailLayout preview="Verify your email">
+ *   <div className="bg-white p-10 rounded-lg">
+ *     <h1 className="text-2xl font-bold text-gray-900">Hello</h1>
+ *   </div>
+ * </EmailLayout>
+ * ```
+ */
 export function EmailLayout({ children, preview }: EmailLayoutProps) {
   return (
     <Html>
       <Head />
-      {preview && <Text style={{ display: 'none' }}>{preview}</Text>}
-      <Body style={bodyStyle}>
-        <Container style={containerStyle}>
-          <Section style={contentStyle}>{children}</Section>
-          <Hr style={dividerStyle} />
-          <Text style={footerStyle}>
-            {process.env.NEXT_PUBLIC_APP_NAME || 'Next.js Starter'}
+      <Tailwind
+        config={{
+          theme: {
+            extend: {
+              colors: {
+                brand: '#000000',
+                'brand-secondary': '#666666',
+              },
+            },
+          },
+        }}
+      >
+        {preview && (
+          <Text className="hidden overflow-hidden leading-[0]">
+            {preview}
           </Text>
-        </Container>
-      </Body>
+        )}
+
+        <Body className="bg-gray-100 font-sans">
+          <Container className="max-w-[600px] mx-auto p-5">
+            <Section className="bg-white rounded-lg p-10">
+              {children}
+            </Section>
+
+            <Hr className="border-gray-300 my-5" />
+
+            <Text className="text-gray-500 text-xs text-center mt-5">
+              {process.env.NEXT_PUBLIC_APP_NAME || 'Next.js Starter'}
+            </Text>
+          </Container>
+        </Body>
+      </Tailwind>
     </Html>
   )
 }
-
-const bodyStyle = { backgroundColor: '#f6f9fc', fontFamily: 'sans-serif' }
-const containerStyle = { maxWidth: '600px', margin: '0 auto', padding: '20px' }
-const contentStyle = { backgroundColor: '#fff', borderRadius: '5px', padding: '40px' }
-const dividerStyle = { borderColor: '#e6e6e6', margin: '20px 0' }
-const footerStyle = { color: '#8898aa', fontSize: '12px', textAlign: 'center' }
 ```
 
 **Purpose:**
 - Consistent styling across all emails
+- **Tailwind CSS support** (auto-converted to inline styles)
 - Responsive container
 - Preview text support
 - Footer with app branding
@@ -330,6 +370,134 @@ const footerStyle = { color: '#8898aa', fontSize: '12px', textAlign: 'center' }
 - ✅ Reusable by all feature branches
 - ✅ Enforces design consistency
 - ✅ Single source of truth
+- ✅ **Tailwind DX with email compatibility**
+
+---
+
+## 🎨 Tailwind CSS in Emails
+
+### How It Works
+
+React Email's `<Tailwind>` component **automatically converts Tailwind classes to inline styles**:
+
+```tsx
+// ✅ YOU WRITE (Tailwind DX):
+<div className="bg-white p-10 rounded-lg">
+  <h1 className="text-2xl font-bold text-gray-900">Hello</h1>
+</div>
+
+// ✅ REACT EMAIL CONVERTS TO (Email-safe inline):
+<div style="background-color: #ffffff; padding: 40px; border-radius: 8px;">
+  <h1 style="font-size: 24px; font-weight: bold; color: #111827;">Hello</h1>
+</div>
+```
+
+**Transformation:**
+- `bg-white` → `background-color: #ffffff`
+- `p-10` → `padding: 40px` (pixel-based for email compatibility)
+- `rounded-lg` → `border-radius: 8px`
+- `text-2xl` → `font-size: 24px`
+
+---
+
+### Available Tailwind Utilities
+
+All standard Tailwind utilities work:
+
+```tsx
+// Spacing
+className="p-4 m-2 px-6 py-3"
+
+// Colors
+className="bg-white text-gray-900 border-gray-300"
+
+// Typography
+className="text-base font-bold leading-6"
+
+// Layout
+className="max-w-[600px] mx-auto"
+
+// Borders
+className="rounded-lg border border-gray-200"
+
+// Custom colors (from config)
+className="bg-brand text-brand-secondary"
+```
+
+---
+
+### Email Client Compatibility
+
+React Email's Tailwind conversion is **tested and verified** on:
+
+| Email Client | Support | Notes |
+|--------------|---------|-------|
+| **Gmail** | ✅ | Fully supported |
+| **Apple Mail** | ✅ | Fully supported |
+| **Outlook** | ✅ | Fully supported (automatic table-based layout) |
+| **Yahoo! Mail** | ✅ | Fully supported |
+| **HEY** | ✅ | Fully supported |
+| **Superhuman** | ✅ | Fully supported |
+
+---
+
+### Known Limitations
+
+<details>
+<summary><strong>1. No Context Providers Inside `<Tailwind>`</strong></summary>
+
+```tsx
+// ❌ WRONG: Context provider inside Tailwind
+<Tailwind>
+  <MyContextProvider>
+    {children}  {/* useContext won't work */}
+  </MyContextProvider>
+</Tailwind>
+
+// ✅ RIGHT: Context provider outside Tailwind
+<MyContextProvider>
+  <Tailwind>
+    {children}  {/* useContext works */}
+  </Tailwind>
+</MyContextProvider>
+```
+</details>
+
+<details>
+<summary><strong>2. No `prose` from `@tailwindcss/typography`</strong></summary>
+
+```tsx
+// ❌ NOT SUPPORTED:
+<article className="prose">
+  <p>Complex selectors not inlined</p>
+</article>
+
+// ✅ USE INSTEAD:
+<article>
+  <p className="text-base text-gray-700 leading-6">
+    Explicit Tailwind utilities
+  </p>
+</article>
+```
+</details>
+
+<details>
+<summary><strong>3. No `space-*` Utilities</strong></summary>
+
+```tsx
+// ❌ NOT SUPPORTED:
+<div className="space-y-4">
+  <div>Item 1</div>
+  <div>Item 2</div>
+</div>
+
+// ✅ USE INSTEAD:
+<div>
+  <div className="mb-4">Item 1</div>
+  <div>Item 2</div>
+</div>
+```
+</details>
 
 ---
 
@@ -354,16 +522,18 @@ import {
   Link,         // Anchor link
   Img,          // Image
   Hr,           // Horizontal rule
-  Preview,      // Preview text
+  Tailwind,     // **Tailwind CSS wrapper**
 } from '@react-email/components'
 ```
+
+---
 
 ### Example Usage (Feature Branch)
 
 ```tsx
 // feature/auth-ui: lib/email/templates/verification-email.tsx
 import { EmailLayout } from '@/lib/email/components/email-layout'
-import { Text, Button, Heading } from '@react-email/components'
+import { Text, Button, Heading, Section } from '@react-email/components'
 
 interface VerificationEmailProps {
   userName: string
@@ -373,27 +543,36 @@ interface VerificationEmailProps {
 export function VerificationEmail({ userName, verificationUrl }: VerificationEmailProps) {
   return (
     <EmailLayout preview="Verify your email address">
-      <Heading>Welcome to Next.js Starter!</Heading>
-      <Text>Hi {userName},</Text>
-      <Text>Thank you for signing up. Please verify your email address:</Text>
-      <Button href={verificationUrl} style={buttonStyle}>
-        Verify Email
-      </Button>
-      <Text style={{ fontSize: '14px', color: '#666' }}>
-        This link expires in 24 hours.
-      </Text>
+      <Section className="space-y-4">
+        <Heading className="text-2xl font-bold text-gray-900 mb-5">
+          Welcome to {process.env.NEXT_PUBLIC_APP_NAME}!
+        </Heading>
+
+        <Text className="text-base text-gray-700 leading-6">
+          Hi {userName},
+        </Text>
+
+        <Text className="text-base text-gray-700 leading-6">
+          Thank you for signing up. Please verify your email address:
+        </Text>
+
+        <Button
+          href={verificationUrl}
+          className="bg-black text-white px-6 py-3 rounded-md font-semibold"
+        >
+          Verify Email Address
+        </Button>
+
+        <Text className="text-sm text-gray-500 mt-5">
+          This link expires in 24 hours.
+        </Text>
+      </Section>
     </EmailLayout>
   )
 }
-
-const buttonStyle = {
-  backgroundColor: '#000',
-  color: '#fff',
-  padding: '12px 24px',
-  borderRadius: '5px',
-  textDecoration: 'none',
-}
 ```
+
+---
 
 ### Sending Email (Feature Branch)
 
@@ -423,15 +602,16 @@ This branch provides email infrastructure for:
 | **feature/auth-ui** | verification-email.tsx<br>reset-password-email.tsx | Auth email flows |
 | **feature/notifications** (future) | notification-email.tsx | System notifications |
 | **feature/receipts** (future) | receipt-email.tsx | Transactional receipts |
-| **Any feature** | Custom templates | Using `sendEmail()` utility |
+| **Any feature** | Custom templates | Using `sendEmail()` + Tailwind |
 
 **Pattern:**
 ```
 feature/email-setup (infrastructure)
-  └── sendEmail() available
+  └── sendEmail() + Tailwind support
 
 feature/auth-ui (consumer)
   ├── Uses sendEmail()
+  ├── Uses Tailwind classes in templates
   ├── Creates verification-email.tsx
   ├── Creates reset-password-email.tsx
   └── Integrates with Better Auth
@@ -452,6 +632,7 @@ feature/auth-ui (consumer)
 ### Email Compatibility
 
 ✅ **Email-safe components** – React Email guarantees compatibility
+✅ **Tailwind CSS** – Auto-converted to inline styles
 ✅ **Inline CSS** – Automatic conversion for email clients
 ✅ **Responsive** – Works on desktop and mobile email clients
 ✅ **Preview text** – First line in email list view
@@ -460,6 +641,7 @@ feature/auth-ui (consumer)
 
 ✅ **Development mode** – Console logging without API calls
 ✅ **Live preview** – Hot reload email template development
+✅ **Tailwind DX** – Use Tailwind classes, auto-converted
 ✅ **Production-ready** – Domain verification, analytics, webhooks
 
 ---
@@ -467,11 +649,12 @@ feature/auth-ui (consumer)
 ## 🚧 Current State
 
 ### ✅ Completed (Infrastructure)
-- [x] Dependencies installed (resend, react-email, @react-email/components)
+- [x] Dependencies installed (resend, react-email, @react-email/components, **@react-email/tailwind**)
 - [x] Resend client configured
 - [x] Email sending utility created
 - [x] React Email rendering integrated
-- [x] Base EmailLayout component (optional)
+- [x] **Tailwind CSS support added** (automatic inline conversion)
+- [x] Base EmailLayout component with Tailwind
 - [x] Development mode (console logging)
 - [x] Production mode (actual sending)
 - [x] Email preview setup
@@ -480,13 +663,13 @@ feature/auth-ui (consumer)
 ### 🔄 Not Included (Feature Branch Responsibility)
 - [ ] Email templates (verification, password reset, etc.)
 - [ ] Better Auth integration
-- [ ] Template-specific styling
+- [ ] Template-specific content
 - [ ] Business logic (when to send emails)
 - [ ] Feature-specific email flows
 
 ### 🎯 Will Be Used By
-- `feature/auth-ui` → Email verification & password reset
-- `feature/notifications` (future) → System notifications
+- `feature/auth-ui` → Email verification & password reset (with Tailwind)
+- `feature/notifications` (future) → System notifications (with Tailwind)
 - Any feature requiring transactional emails
 
 ---
@@ -503,11 +686,19 @@ SKIP_EMAIL_SENDING="true"
 **Test:**
 ```typescript
 import { sendEmail } from '@/lib/email/send'
+import { EmailLayout } from '@/lib/email/components/email-layout'
+import { Text } from '@react-email/components'
 
 await sendEmail({
   to: 'test@example.com',
   subject: 'Test Email',
-  html: '<h1>Hello World</h1>',
+  react: (
+    <EmailLayout preview="Test">
+      <Text className="text-base text-gray-900">
+        Hello with Tailwind!
+      </Text>
+    </EmailLayout>
+  ),
 })
 ```
 
@@ -516,7 +707,7 @@ await sendEmail({
 📧 Email (skipped in dev)
 To: test@example.com
 Subject: Test Email
-HTML Content: <h1>Hello World</h1>...
+React Email Template: EmailLayout
 ```
 
 ---
@@ -534,8 +725,15 @@ import { Text, Button } from '@react-email/components'
 export default function TestEmail() {
   return (
     <EmailLayout preview="Test email">
-      <Text>This is a test email</Text>
-      <Button href="https://example.com">Click Me</Button>
+      <Text className="text-base text-gray-900">
+        This is a test email with Tailwind CSS
+      </Text>
+      <Button
+        href="https://example.com"
+        className="bg-black text-white px-6 py-3 rounded-md mt-4"
+      >
+        Click Me
+      </Button>
     </EmailLayout>
   )
 }
@@ -552,6 +750,7 @@ npm run email:dev
 - Hot reload on template changes
 - Multiple email preview
 - Responsive view (desktop/mobile)
+- **See Tailwind classes converted to inline styles**
 
 ---
 
@@ -569,48 +768,20 @@ EMAIL_FROM="noreply@yourdomain.com"
 await sendEmail({
   to: 'your-email@example.com',
   subject: 'Production Test',
-  html: '<h1>Hello from Production</h1>',
+  react: (
+    <EmailLayout>
+      <Text className="text-lg font-bold">
+        Hello from Production with Tailwind!
+      </Text>
+    </EmailLayout>
+  ),
 })
 ```
 
 **Verify:**
 1. Check email inbox
 2. Check Resend dashboard for delivery status
-3. Check email headers (SPF, DKIM)
-
----
-
-### Manual Test Endpoint (Optional)
-
-```typescript
-// app/api/test-email/route.ts (development only)
-import { sendEmail } from '@/lib/email/send'
-import { EmailLayout } from '@/lib/email/components/email-layout'
-import { Text } from '@react-email/components'
-
-export async function POST() {
-  if (process.env.NODE_ENV !== 'development') {
-    return Response.json({ error: 'Development only' }, { status: 403 })
-  }
-
-  await sendEmail({
-    to: 'test@example.com',
-    subject: 'Test Email',
-    react: (
-      <EmailLayout preview="Test email">
-        <Text>This is a test email from API route</Text>
-      </EmailLayout>
-    ),
-  })
-
-  return Response.json({ success: true })
-}
-```
-
-**Test:**
-```bash
-curl -X POST http://localhost:3000/api/test-email
-```
+3. Inspect email source (Tailwind classes → inline styles)
 
 ---
 
@@ -618,7 +789,7 @@ curl -X POST http://localhost:3000/api/test-email
 
 ### Initial Setup
 - [ ] Branch from `default` or `dev`
-- [ ] Install dependencies (`resend`, `react-email`, `@react-email/components`)
+- [ ] Install dependencies (`resend`, `react-email`, `@react-email/components`, **`@react-email/tailwind`**)
 - [ ] Create Resend account
 - [ ] Get API key from [resend.com/api-keys](https://resend.com/api-keys)
 - [ ] (Production) Verify domain at [resend.com/domains](https://resend.com/domains)
@@ -626,7 +797,7 @@ curl -X POST http://localhost:3000/api/test-email
 ### Core Implementation
 - [ ] Create `/lib/email/client.ts` (Resend instance)
 - [ ] Create `/lib/email/send.ts` (sending utility with React Email support)
-- [ ] Create `/lib/email/components/email-layout.tsx` (optional base layout)
+- [ ] Create `/lib/email/components/email-layout.tsx` (**with Tailwind wrapper**)
 - [ ] Create `/emails/.gitkeep` (preview directory)
 
 ### Configuration
@@ -640,6 +811,7 @@ curl -X POST http://localhost:3000/api/test-email
 ### Testing
 - [ ] Test development mode (console logging)
 - [ ] Test email preview: `npm run email:dev`
+- [ ] Test Tailwind class conversion (inspect preview)
 - [ ] Test production mode (actual sending)
 - [ ] Verify React component → HTML conversion
 - [ ] Test error handling
@@ -648,7 +820,7 @@ curl -X POST http://localhost:3000/api/test-email
 ### Documentation
 - [ ] Create branch README.md
 - [ ] Document `sendEmail` API
-- [ ] Document React Email integration
+- [ ] Document React Email + Tailwind integration
 - [ ] Explain email preview workflow
 - [ ] Clarify template ownership (feature branches)
 - [ ] Add troubleshooting section
@@ -659,17 +831,17 @@ curl -X POST http://localhost:3000/api/test-email
 
 ```
 default
-  └── feature/email-setup ← CURRENT (infrastructure only)
-       ├── feature/auth-ui (adds verification & reset templates)
-       ├── feature/notifications (future, adds notification templates)
-       └── feature branches (add templates as needed)
+  └── feature/email-setup ← CURRENT (infrastructure with Tailwind)
+       ├── feature/auth-ui (adds templates using Tailwind)
+       ├── feature/notifications (future, uses Tailwind)
+       └── feature branches (use Tailwind in emails)
             └── dev → main
 ```
 
-**Current Status:** 🟡 Email infrastructure ready
+**Current Status:** 🟡 Email infrastructure ready with Tailwind support
 **Dependencies:** None (branches from `default`)
 **Next Step:** Merge into `dev`, feature branches add templates
-**End Goal:** Universal email infrastructure for all features
+**End Goal:** Universal email infrastructure with Tailwind DX
 
 ---
 
@@ -677,12 +849,13 @@ default
 
 ### Guidelines
 
-1. **Keep infrastructure minimal** – Client + utility + React Email only
+1. **Keep infrastructure minimal** – Client + utility + React Email + Tailwind only
 2. **No templates** – Templates belong in feature branches
 3. **Document utility API** – Clear interface for consumers
 4. **Test both modes** – Development (console) and production (actual)
 5. **Handle errors gracefully** – Email failures shouldn't break flows
 6. **Type everything** – Full TypeScript support
+7. **Use Tailwind classes** – Maintain DX consistency
 
 ### Commit Message Format
 
@@ -697,37 +870,23 @@ git commit -m "email: <change>
 **Examples:**
 
 ```bash
-git commit -m "email: add Resend client and sending utility
+git commit -m "email: add Tailwind CSS support
 
-- Create /lib/email/client.ts with Resend instance
-- Create /lib/email/send.ts with type-safe utility
-- Add development mode (skip sending, console log)
-- Add production mode (actual sending via Resend)
-- Support HTML and React content
+- Integrate @react-email/tailwind component
+- Wrap EmailLayout with <Tailwind>
+- Auto-convert Tailwind classes to inline styles
+- Configure custom brand colors
+- Maintain email client compatibility
 
-Email infrastructure foundation ready."
-```
+IMPROVES:
+- Developer experience (Tailwind DX)
+- Code readability (70% less verbose)
+- Design consistency (Tailwind scale)
 
-```bash
-git commit -m "email: integrate React Email rendering
-
-- Update sendEmail() to support React Email components
-- Use @react-email/render for React → HTML conversion
-- Maintain backward compatibility with plain HTML
-- Enhanced logging for React components
-
-Feature branches can now use React Email primitives."
-```
-
-```bash
-git commit -m "email: add base EmailLayout component
-
-- Create /lib/email/components/email-layout.tsx
-- Reusable base layout for consistent styling
-- Responsive container with footer
-- Preview text support
-
-Infrastructure component for feature branches."
+MAINTAINS:
+- Email compatibility (automatic inline conversion)
+- Production-ready rendering
+- All email clients supported"
 ```
 
 ---
@@ -736,14 +895,16 @@ Infrastructure component for feature branches."
 
 This branch is ready to merge when:
 
-- ✅ Dependencies installed (resend, react-email, @react-email/components)
+- ✅ Dependencies installed (resend, react-email, @react-email/components, **@react-email/tailwind**)
 - ✅ Resend client configured with environment validation
 - ✅ Email sending utility created with type-safe interface
 - ✅ React Email rendering integrated
-- ✅ Base EmailLayout component created (optional)
+- ✅ **Tailwind CSS support added with automatic inline conversion**
+- ✅ Base EmailLayout component created with Tailwind
 - ✅ Development mode working (console logging)
 - ✅ Production mode working (actual sending)
 - ✅ Email preview setup working (`npm run email:dev`)
+- ✅ Tailwind classes correctly converted to inline styles
 - ✅ Environment variables configured
 - ✅ Error handling implemented
 - ✅ Documentation complete
@@ -800,6 +961,27 @@ SKIP_EMAIL_SENDING="false"
 
 ---
 
+### Issue: Tailwind classes not working in email
+
+**Cause:** Not wrapped with `<Tailwind>` component
+
+**Solution:**
+```tsx
+// ❌ WRONG:
+<Body className="bg-gray-100">  {/* Won't work */}
+  {children}
+</Body>
+
+// ✅ RIGHT:
+<Tailwind>
+  <Body className="bg-gray-100">  {/* Works */}
+    {children}
+  </Body>
+</Tailwind>
+```
+
+---
+
 ### Issue: React Email preview not working
 
 **Cause:** No preview files in `/emails/`
@@ -807,7 +989,12 @@ SKIP_EMAIL_SENDING="false"
 **Solution:**
 ```bash
 # Create test template
-echo 'export default function Test() { return <div>Test</div> }' > emails/test.tsx
+cat > emails/test.tsx << 'EOF'
+import { Text } from '@react-email/components'
+export default function Test() {
+  return <Text className="text-base">Test</Text>
+}
+EOF
 
 # Start preview
 npm run email:dev
@@ -834,6 +1021,7 @@ npm install -D @types/react @types/react-dom
 - [Resend Next.js Guide](https://resend.com/docs/send-with-nextjs)
 - [React Email Documentation](https://react.email/docs/introduction)
 - [React Email Components](https://react.email/docs/components/html)
+- [React Email Tailwind](https://react.email/docs/components/tailwind) **← NEW**
 
 ### Resend Resources
 
@@ -845,6 +1033,7 @@ npm install -D @types/react @types/react-dom
 
 - [Examples](https://react.email/examples) – Production email templates
 - [Preview](https://demo.react.email) – Live component preview
+- [Tailwind Demo](https://demo.react.email/preview/notifications/vercel-invite-user) **← NEW**
 - [GitHub](https://github.com/resend/react-email) – Source code
 
 ---
@@ -858,10 +1047,11 @@ Email setup is **foundational infrastructure**:
 
 - **Single responsibility** – Enable email sending
 - **Feature-agnostic** – No templates, no business logic
-- **Reusable** – Any feature can use `sendEmail()`
+- **Reusable** – Any feature can use `sendEmail()` + Tailwind
 - **Type-safe** – Full TypeScript support
 - **Production-ready** – Development & production modes
-- **Email-compatible** – React Email guarantees delivery
+- **Email-compatible** – React Email + Tailwind guarantees delivery
+- **Better DX** – Tailwind classes with automatic inline conversion
 
 This branch provides **infrastructure**.
 Feature branches provide **templates and business logic**.
@@ -870,6 +1060,7 @@ Every decision must serve:
 - Long-term maintainability
 - Architectural clarity
 - Professional scalability
+- **Developer experience without compromising email compatibility**
 
 ---
 

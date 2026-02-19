@@ -7,6 +7,7 @@ import {
   Section,
   Text,
   Hr,
+  Tailwind,
 } from '@react-email/components'
 
 interface EmailLayoutProps {
@@ -15,17 +16,17 @@ interface EmailLayoutProps {
 }
 
 /**
- * Base email layout for consistent styling
+ * Base email layout with Tailwind CSS support
  *
- * Provides:
- * - Responsive container
- * - Consistent typography
- * - Footer with branding
+ * Automatically converts Tailwind classes to inline styles
+ * for email client compatibility.
  *
  * @example
  * ```tsx
  * <EmailLayout preview="Verify your email">
- *   <Text>Email content here</Text>
+ *   <div className="bg-white p-10 rounded-lg">
+ *     <h1 className="text-2xl font-bold text-gray-900">Hello</h1>
+ *   </div>
  * </EmailLayout>
  * ```
  */
@@ -33,48 +34,38 @@ export function EmailLayout({ children, preview }: EmailLayoutProps) {
   return (
     <Html>
       <Head />
-      {preview && <Text style={{ display: 'none', overflow: 'hidden', lineHeight: 0 }}>{preview}</Text>}
-      <Body style={bodyStyle}>
-        <Container style={containerStyle}>
-          <Section style={contentStyle}>{children}</Section>
-
-          <Hr style={dividerStyle} />
-
-          <Text style={footerStyle}>
-            {process.env.NEXT_PUBLIC_APP_NAME || 'Next.js Starter'}
+      <Tailwind
+        config={{
+          theme: {
+            extend: {
+              colors: {
+                brand: '#000000',
+                'brand-secondary': '#666666',
+              },
+            },
+          },
+        }}
+      >
+        {preview && (
+          <Text className="hidden overflow-hidden leading-[0]">
+            {preview}
           </Text>
-        </Container>
-      </Body>
+        )}
+
+        <Body className="bg-gray-100 font-sans">
+          <Container className="max-w-150 mx-auto p-5">
+            <Section className="bg-white rounded-lg p-10">
+              {children}
+            </Section>
+
+            <Hr className="border-gray-300 my-5" />
+
+            <Text className="text-gray-500 text-xs text-center mt-5">
+              {process.env.NEXT_PUBLIC_APP_NAME || 'Next.js Starter'}
+            </Text>
+          </Container>
+        </Body>
+      </Tailwind>
     </Html>
   )
-}
-
-// Email-safe inline styles
-const bodyStyle: React.CSSProperties = {
-  backgroundColor: '#f6f9fc',
-  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-}
-
-const containerStyle: React.CSSProperties = {
-  maxWidth: '600px',
-  margin: '0 auto',
-  padding: '20px',
-}
-
-const contentStyle: React.CSSProperties = {
-  backgroundColor: '#ffffff',
-  borderRadius: '5px',
-  padding: '40px',
-}
-
-const dividerStyle: React.CSSProperties = {
-  borderColor: '#e6e6e6',
-  margin: '20px 0',
-}
-
-const footerStyle: React.CSSProperties = {
-  color: '#8898aa',
-  fontSize: '12px',
-  textAlign: 'center',
-  marginTop: '20px',
 }
