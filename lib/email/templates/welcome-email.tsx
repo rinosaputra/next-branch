@@ -32,6 +32,21 @@ const helpResources = [
   },
 ]
 
+const startQuideSteps = [
+  {
+    title: 'Complete your profile',
+    description: 'Add your details to personalize your experience',
+  },
+  {
+    title: 'Explore the dashboard',
+    description: 'Discover features and customize your workspace',
+  },
+  {
+    title: 'Invite your team',
+    description: 'Collaborate with colleagues and start working together',
+  },
+]
+
 export function WelcomeEmail({ userName, dashboardUrl }: WelcomeEmailProps) {
   return (
     <EmailLayout preview={`Welcome to ${process.env.NEXT_PUBLIC_APP_NAME}! 🎉`}>
@@ -64,50 +79,19 @@ export function WelcomeEmail({ userName, dashboardUrl }: WelcomeEmailProps) {
           </Heading>
 
           <Section className="space-y-4">
-            {/* Step 1 */}
-            <Section className="flex items-start">
+            {startQuideSteps.map((step, index) => (<Section className="flex items-start mb-4" key={index}>
               <Text className="inline-block min-w-7 h-7 bg-black text-white rounded-full text-center font-bold mr-3 shrink-0 leading-7 m-0">
-                1
+                {index + 1}
               </Text>
               <Section>
                 <Text className="text-sm font-semibold text-gray-900 m-0 mb-1">
-                  Complete your profile
+                  {step.title}
                 </Text>
                 <Text className="text-sm text-gray-600 m-0">
-                  Add your details to personalize your experience
+                  {step.description}
                 </Text>
               </Section>
-            </Section>
-
-            {/* Step 2 */}
-            <Section className="flex items-start">
-              <Text className="inline-block min-w-7 h-7 bg-black text-white rounded-full text-center font-bold mr-3 shrink-0 leading-7 m-0">
-                2
-              </Text>
-              <Section>
-                <Text className="text-sm font-semibold text-gray-900 m-0 mb-1">
-                  Explore the dashboard
-                </Text>
-                <Text className="text-sm text-gray-600 m-0">
-                  Discover features and customize your workspace
-                </Text>
-              </Section>
-            </Section>
-
-            {/* Step 3 */}
-            <Section className="flex items-start">
-              <Text className="inline-block min-w-7 h-7 bg-black text-white rounded-full text-center font-bold mr-3 shrink-0 leading-7 m-0">
-                3
-              </Text>
-              <Section>
-                <Text className="text-sm font-semibold text-gray-900 m-0 mb-1">
-                  Invite your team
-                </Text>
-                <Text className="text-sm text-gray-600 m-0">
-                  Collaborate with colleagues and start working together
-                </Text>
-              </Section>
-            </Section>
+            </Section>))}
           </Section>
         </Section>
 
@@ -115,7 +99,7 @@ export function WelcomeEmail({ userName, dashboardUrl }: WelcomeEmailProps) {
         <Section className="text-center my-8">
           <Button
             href={dashboardUrl}
-            className="bg-black text-white px-8 py-4 rounded-lg font-semibold text-base no-underline inline-block w-full text-center"
+            className="bg-black text-white px-8 py-4 rounded-lg font-semibold text-base no-underline inline-block text-center"
           >
             Go to Dashboard →
           </Button>
@@ -153,7 +137,7 @@ export function WelcomeEmail({ userName, dashboardUrl }: WelcomeEmailProps) {
           <Section className="mt-3 space-y-2">
             {helpResources.map((resource, index) => (
               <Text key={index} className="text-sm m-0">
-                <Link href={resource.url} className="text-blue-600 no-underline hover:underline">
+                <Link href={resource.url} className="text-blue-600">
                   {resource.name}
                 </Link>
                 {' - '}
@@ -163,10 +147,8 @@ export function WelcomeEmail({ userName, dashboardUrl }: WelcomeEmailProps) {
           </Section>
         </Section>
 
-        <Hr className="border-gray-300 my-6" />
-
         {/* Footer Message */}
-        <Section className="mt-8 pt-6 border-t border-gray-200">
+        <Section className="mt-6">
           <Text className="text-sm text-gray-600 text-center leading-6">
             Thanks for choosing {process.env.NEXT_PUBLIC_APP_NAME}!
             <br />
