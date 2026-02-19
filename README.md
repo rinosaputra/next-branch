@@ -1,160 +1,345 @@
-# next-branch
+# 🚀 next-branch
 
-> **Opinionated, production-grade Next.js fullstack starter architecture.**
-> Branch-based evolution. Clean integration. Enterprise-ready foundation.
+**Opinionated fullstack Next.js starter template for experimenting and integrating modern packages like Prisma, Better Auth, shadcn/ui, and TanStack.**
 
----
+A production-grade architectural foundation designed with **branch-based evolution**, clean integration patterns, and enterprise-ready structure.
 
-## 🎯 What is this?
-
-**next-branch** is not another boilerplate.
-
-This is a **structured fullstack reference implementation** for Next.js applications that need:
-
-- Clean architectural foundation
-- Modular integration strategy
-- Branch-based feature evolution
-- Production-ready patterns
-- SaaS-scalable structure
-
-This repository demonstrates how to build and evolve a modern fullstack app **the right way** — with discipline, clarity, and long-term maintainability in mind.
+[![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue.svg)](https://www.typescriptlang.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-16.x-black.svg)](https://nextjs.org/)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
 ---
 
-## 🧱 Philosophy
+## 🎯 Philosophy
 
-- **Modular but not fragmented** — structured, not scattered
-- **Opinionated but extensible** — clear defaults, flexible when needed
-- **Minimal but powerful** — no bloat, only essentials
-- **Clean integration, not package dumping** — every tool has a purpose
+This is **not** a boilerplate dump.  
+This is **not** a component playground.  
+This is **not** a tutorial project.
 
-This is an **engineering standard**, not a tutorial project.
+**next-branch** is:
+- A **structured experimentation lab** for modern fullstack patterns
+- A **reusable foundation** for scalable SaaS applications
+- An **opinionated reference** for clean Next.js architecture
+- A **Git workflow blueprint** for disciplined feature integration
+
+---
+
+## 💡 Why This Exists
+
+**The Problem:**
+- Most Next.js starters are either too minimal (just CRA++) or too opinionated (locked into specific patterns)
+- Integrating modern tools like Prisma, shadcn/ui, and TanStack requires architectural decisions most developers repeat from scratch
+- No clear reference for production-grade Git workflows in fullstack repos
+
+**The Solution:**
+`next-branch` provides:
+- **Battle-tested integration patterns** that actually scale
+- **Clear architectural decisions** with documentation of *why*, not just *how*
+- **Git-based evolution model** that treats infrastructure as code
+- **Production-ready foundation** that doesn't force you into rigid abstractions
+
+This is the starter you wish existed when you started your last project.
+
+---
+
+## 🧱 Architecture Principles
+
+1. **Modular but not fragmented** — Clear separation without over-engineering
+2. **Opinionated but extensible** — Strong defaults with customization paths
+3. **Minimal but powerful** — No unnecessary bloat, every dependency justified
+4. **Clean integration** — Each tool added with architectural intent
 
 ---
 
 ## 🌿 Branch Strategy
 
-We use branches to **isolate, test, and integrate** features cleanly:
+```
+default     →  Pure Next.js baseline (zero abstraction)
+feature/*   →  Isolated integration per tool/feature
+dev         →  Controlled integration branch (current)
+main        →  Stable production snapshot
+```
 
-| Branch | Purpose |
-|--------|---------|
-| `default` | Pure Next.js baseline (zero abstraction) |
-| `feature/*` | Isolated integration experiments |
-| `dev` | Controlled integration branch |
-| `main` | Stable production-ready snapshot |
+### Current Branch: `dev`
 
-**Branches are not permanent variations.**
-They are **evolution stages** that merge into a unified architecture.
+This branch represents the **integration testing ground** where feature branches are merged, validated, and stabilized before reaching `main`.
 
----
-
-## 📦 Stack Roadmap
-
-Current and planned integrations:
-
-- ✅ Next.js 15 (App Router)
-- ✅ TypeScript
-- ✅ Tailwind CSS
-- 🔄 shadcn/ui (minimal primitives only)
-- 🔄 Prisma (relational architecture)
-- 🔄 Better Auth (RBAC ready)
-- 🔄 TanStack Query (data strategy)
-- 🔄 TanStack Table (data-heavy UI)
-- 🔜 Caching strategy
-- 🔜 File upload patterns
-- 🔜 Audit logging
-- 🔜 Multi-role system
-
-Every integration is **justified, structured, and future-proof**.
+**What's integrated so far:**
+- ✅ **shadcn/ui** — Minimal component infrastructure (New York preset)
+- ✅ **Prisma ORM** — Type-safe database layer with PostgreSQL
+- 🚧 **Better Auth** — Coming soon
+- 🚧 **TanStack Query** — Coming soon
+- 🚧 **TanStack Table** — Coming soon
 
 ---
 
-## 🚀 Quick Start
+## 📦 Tech Stack
 
+### Core
+- **Next.js 16.1.6** — App Router, React Server Components
+- **React 19.2.3** — Latest stable release
+- **TypeScript 5** — Full type safety
+
+### UI Layer
+- **Tailwind CSS v4** — Next-generation CSS architecture
+- **shadcn/ui v3.8.4** — Composable UI primitives (on-demand installation)
+- **Lucide React** — Icon system
+- **Class Variance Authority** — Component variant management
+
+### Database Layer
+- **Prisma 7.4.0** — Type-safe ORM with migration system
+- **PostgreSQL** — Recommended production database
+- **@prisma/adapter-pg** — Connection pooling for serverless
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 20+ (LTS recommended)
+- PostgreSQL database (local or hosted)
+- Git
+
+### 1. Clone Repository
 ```bash
-# Clone the repository
 git clone https://github.com/rinosaputra/next-branch.git
 cd next-branch
+git checkout dev
+```
 
-# Install dependencies
+### 2. Install Dependencies
+```bash
 npm install
+```
 
-# Run development server
+### 3. Environment Setup
+Create a `.env` file (copy from `.env.example`):
+```env
+DATABASE_URL="postgresql://user:password@localhost:5432/next_branch_dev"
+```
+
+### 4. Database Setup
+```bash
+# Run migrations
+npx prisma migrate dev
+
+# Generate Prisma Client
+npx prisma generate
+
+# (Optional) Open Prisma Studio
+npx prisma studio
+```
+
+### 5. Run Development Server
+```bash
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000)
 
-### Exploring Branches
+---
 
+## 🧠 Component Philosophy (shadcn/ui)
+
+### ❌ What We DON'T Do
+- Install all 40+ components upfront
+- Create a "component showcase"
+- Add unused dependencies
+
+### ✅ What We DO
+- Install components **on-demand** when features require them
+- Keep dependency tree minimal
+- Maintain clear separation between primitives and composed components
+
+### Installing Components
 ```bash
-# Checkout a specific integration branch
-git checkout feature/shadcn-ui
+# Install individual components as needed
+npx shadcn@latest add button
+npx shadcn@latest add form
+npx shadcn@latest add card
 
-# Compare branches
-git diff default..dev
+# Or multiple at once
+npx shadcn@latest add button input label
+```
+
+Components are installed to `components/ui/` and remain under your control.
+
+---
+
+## 🗄️ Database Architecture (Prisma)
+
+### Schema Philosophy
+- **Relational integrity** enforced at database level
+- **Type-safe queries** without manual typing
+- **Migration-first approach** — version-controlled schema evolution
+- **Prepared for scale** — RBAC, audit logs, multi-tenant patterns
+
+### Key Commands
+```bash
+# Create and apply migrations
+npx prisma migrate dev --name descriptive_name
+
+# Reset database (dev only)
+npx prisma migrate reset
+
+# Deploy migrations (production)
+npx prisma migrate deploy
+```
+
+### Example Usage
+```typescript
+// app/api/users/route.ts
+import { prisma } from '@/lib/prisma';
+
+export async function GET() {
+  const users = await prisma.user.findMany();
+  return Response.json(users);
+}
 ```
 
 ---
 
-## 🧠 Why This Approach?
+## 📁 Project Structure
 
-Most Next.js starters are either:
-
-- **Too minimal** — leaving too much to figure out
-- **Too bloated** — dumping every possible package
-- **Too opinionated in the wrong way** — locking you into bad patterns
-
-**next-branch** takes a different approach:
-
-- Start with a **clean baseline** (`default`)
-- Add features **one by one** in isolated branches
-- Merge thoughtfully into **controlled integration** (`dev`)
-- Stabilize into **production release** (`main`)
-
-This mirrors **real-world engineering workflow** — not random stack assembly.
+```
+next-branch/
+├── app/                    # Next.js App Router
+│   ├── globals.css         # Tailwind + shadcn theme variables
+│   ├── layout.tsx          # Root layout
+│   └── page.tsx            # Homepage
+├── components/
+│   └── ui/                 # shadcn components (installed on-demand)
+├── lib/
+│   ├── prisma.ts           # Prisma Client singleton
+│   └── utils.ts            # Utility functions (cn, etc.)
+├── hooks/                  # Custom React hooks
+├── types/                  # Shared TypeScript definitions
+├── prisma/
+│   ├── schema.prisma       # Database schema
+│   └── migrations/         # Version-controlled migrations
+├── components.json         # shadcn/ui configuration
+├── next-branch.json        # Package metadata for npm
+├── .env.example            # Environment variable template
+└── package.json
+```
 
 ---
 
-## 🎯 Who is This For?
+## 🛠️ Development Workflow
 
-- Engineers building **production fullstack apps**
-- Teams needing a **structured starting point**
-- Developers looking for **clean architectural patterns**
-- Anyone tired of bloated, unmaintainable boilerplates
+### Adding a New Feature
+1. Create a feature branch: `git checkout -b feature/your-feature`
+2. Implement changes following architectural patterns
+3. Test thoroughly in isolation
+4. Open PR to `dev` for integration testing
+5. After validation, merge to `main`
 
-If you're looking for a tutorial project, this is not it.
-If you're looking for a **serious foundation**, you're in the right place.
+### Branch Lifecycle
+```
+feature/your-feature → dev → main
+```
+
+---
+
+## ⚡ Quick Start (For Contributors)
+
+Want to contribute? Get running in 60 seconds:
+
+```bash
+# 1. Fork & clone
+git clone https://github.com/YOUR_USERNAME/next-branch.git
+cd next-branch
+
+# 2. Install & setup
+npm install
+cp .env.example .env
+# Edit .env with your DATABASE_URL
+
+# 3. Database
+npx prisma migrate dev
+npx prisma generate
+
+# 4. Run
+npm run dev
+```
+
+Now create your feature branch and start building!
+
+---
+
+## 🔗 Roadmap
+
+### ✅ Completed
+- Next.js baseline setup
+- Tailwind CSS v4 integration
+- shadcn/ui infrastructure
+- Prisma ORM setup with PostgreSQL
+
+### 🚧 In Progress
+- Better Auth integration (session-based + OAuth)
+- TanStack Query for server state management
+- TanStack Table for data-heavy UIs
+
+### 🔮 Planned
+- File upload strategy (S3-compatible)
+- Multi-tenant architecture patterns
+- RBAC implementation
+- Audit logging system
+- Email service integration
+- Cache strategy (Redis)
 
 ---
 
 ## 📖 Documentation
 
-- [Branch Strategy](./docs/branch-strategy.md) _(coming soon)_
-- [Integration Guide](./docs/integration-guide.md) _(coming soon)_
-- [Architecture Decisions](./docs/architecture.md) _(coming soon)_
+Full integration guides available in respective feature branches:
+- `feature/shadcn-setup` — shadcn/ui configuration & component strategy
+- `feature/prisma-setup` — Database architecture & migration workflow
+
+Unified documentation coming soon in `/docs` folder.
 
 ---
 
 ## 🤝 Contributing
 
-This is an **open-source engineering initiative**.
+This is an **open-source reference architecture**.
 
-We welcome contributions that align with the philosophy:
+### How to Contribute
+1. Fork the repository
+2. Create a feature branch following our naming convention
+3. Implement changes with clear architectural intent
+4. Submit PR with detailed description
+5. Ensure all tests pass and docs are updated
 
-- Clean, justified integrations
-- Long-term maintainability focus
-- No unnecessary abstraction
-- Professional Git workflow
-
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
-
----
-
-## 📜 License
-
-MIT — because good architecture should be accessible.
+### Contribution Guidelines
+- Follow the established architectural philosophy
+- Keep integrations clean and justified
+- Document decisions in relevant README files
+- Maintain backward compatibility where possible
 
 ---
 
-**Built with discipline. Designed for scale.**
+## 📄 License
+
+MIT License
+
+Copyright (c) 2026 Rino Saputra
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED.
+
+---
+
+## 🔗 Links
+
+- **Repository**: [github.com/rinosaputra/next-branch](https://github.com/rinosaputra/next-branch)
+- **Issues**: [github.com/rinosaputra/next-branch/issues](https://github.com/rinosaputra/next-branch/issues)
+- **Discussions**: [github.com/rinosaputra/next-branch/discussions](https://github.com/rinosaputra/next-branch/discussions)
+
+---
+
+**Built with discipline. Designed for scale. Open for all.**
