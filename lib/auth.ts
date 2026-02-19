@@ -1,6 +1,8 @@
 import { betterAuth } from 'better-auth'
 import { prismaAdapter } from 'better-auth/adapters/prisma'
 import { prisma } from '@/lib/prisma'
+import { admin } from 'better-auth/plugins'
+import { ac, roles } from './auth/permissions'
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -8,7 +10,15 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
-  }
+  },
+  plugins: [
+    admin({
+      ac,
+      roles,
+      defaultRole: "viewer",
+      adminUserIds: []
+    })
+  ]
 })
 
 type Auth = typeof auth.$Infer.Session
