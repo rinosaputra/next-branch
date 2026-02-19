@@ -10,63 +10,34 @@ interface VerificationEmailProps {
 export function VerificationEmail({ userName, verificationUrl }: VerificationEmailProps) {
   return (
     <EmailLayout preview="Verify your email address">
-      <Section style={{ padding: '0 0 20px 0' }}>
-        <Heading style={headingStyle}>
+      <Section className="space-y-4">
+        <Heading className="text-2xl font-bold text-gray-900 mb-5">
           Welcome to {process.env.NEXT_PUBLIC_APP_NAME}!
         </Heading>
 
-        <Text style={textStyle}>Hi {userName},</Text>
+        <Text className="text-base text-gray-700 leading-6">
+          Hi {userName},
+        </Text>
 
-        <Text style={textStyle}>
+        <Text className="text-base text-gray-700 leading-6">
           Thank you for signing up. Please verify your email address to complete your registration.
         </Text>
 
-        <Button href={verificationUrl} style={buttonStyle}>
+        <Button
+          href={verificationUrl}
+          className="bg-black text-white px-6 py-3 rounded-md font-semibold text-base inline-block no-underline"
+        >
           Verify Email Address
         </Button>
 
-        <Text style={footerTextStyle}>
+        <Text className="text-sm text-gray-500 mt-5">
           This link will expire in 24 hours.
         </Text>
 
-        <Text style={footerTextStyle}>
+        <Text className="text-sm text-gray-500">
           If you didn't create an account, you can safely ignore this email.
         </Text>
       </Section>
     </EmailLayout>
   )
-}
-
-// Email-safe inline styles
-const headingStyle: React.CSSProperties = {
-  fontSize: '24px',
-  fontWeight: 'bold',
-  color: '#000000',
-  margin: '0 0 20px 0',
-}
-
-const textStyle: React.CSSProperties = {
-  fontSize: '16px',
-  color: '#333333',
-  lineHeight: '24px',
-  margin: '0 0 16px 0',
-}
-
-const buttonStyle: React.CSSProperties = {
-  display: 'inline-block',
-  padding: '12px 24px',
-  backgroundColor: '#000000',
-  color: '#ffffff',
-  textDecoration: 'none',
-  borderRadius: '5px',
-  fontWeight: '600',
-  fontSize: '16px',
-  margin: '20px 0',
-}
-
-const footerTextStyle: React.CSSProperties = {
-  fontSize: '14px',
-  color: '#666666',
-  lineHeight: '20px',
-  margin: '8px 0 0 0',
 }
