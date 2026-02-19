@@ -77,7 +77,7 @@ export const auth = betterAuth({
       ac,
       roles,
       defaultRole: "viewer",
-      adminUserIds: []
+      adminUserIds: process.env.BETTER_AUTH_ADMIN_IDS?.split(",") || []
     })
   ]
 })
