@@ -1,345 +1,529 @@
 # 🚀 next-branch
 
-**Opinionated fullstack Next.js starter template for experimenting and integrating modern packages like Prisma, Better Auth, shadcn/ui, and TanStack.**
+**Opinionated, production-grade Next.js fullstack starter architecture**
 
-A production-grade architectural foundation designed with **branch-based evolution**, clean integration patterns, and enterprise-ready structure.
+A modern fullstack reference implementation with clean Git workflow, branch-based evolution, and enterprise-ready foundation.
 
-[![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue.svg)](https://www.typescriptlang.org/)
-[![Next.js](https://img.shields.io/badge/Next.js-16.x-black.svg)](https://nextjs.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-15-black)](https://nextjs.org/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
 ---
 
-## 🎯 Philosophy
+## 🎯 What is next-branch?
 
-This is **not** a boilerplate dump.  
-This is **not** a component playground.  
-This is **not** a tutorial project.
+`next-branch` is not just another boilerplate.
 
-**next-branch** is:
-- A **structured experimentation lab** for modern fullstack patterns
-- A **reusable foundation** for scalable SaaS applications
-- An **opinionated reference** for clean Next.js architecture
-- A **Git workflow blueprint** for disciplined feature integration
+It's a **structured architectural foundation** that demonstrates:
 
----
+- ✅ **Production-grade integrations** (Better Auth, Prisma, TanStack Query)
+- ✅ **Clean Git workflow** with branch-based evolution
+- ✅ **Feature isolation** through disciplined branch strategy
+- ✅ **Modular architecture** without fragmentation
+- ✅ **Enterprise-ready patterns** (RBAC, email verification, dark mode)
+- ✅ **Scalable foundation** for SaaS applications
 
-## 💡 Why This Exists
+This is **not**:
+- ❌ A kitchen-sink boilerplate with every tool dumped in
+- ❌ A UI component showcase
+- ❌ A beginner tutorial project
 
-**The Problem:**
-- Most Next.js starters are either too minimal (just CRA++) or too opinionated (locked into specific patterns)
-- Integrating modern tools like Prisma, shadcn/ui, and TanStack requires architectural decisions most developers repeat from scratch
-- No clear reference for production-grade Git workflows in fullstack repos
-
-**The Solution:**
-`next-branch` provides:
-- **Battle-tested integration patterns** that actually scale
-- **Clear architectural decisions** with documentation of *why*, not just *how*
-- **Git-based evolution model** that treats infrastructure as code
-- **Production-ready foundation** that doesn't force you into rigid abstractions
-
-This is the starter you wish existed when you started your last project.
+This **is**:
+- ✅ A serious open-source engineering initiative
+- ✅ A reusable enterprise-ready starter template
+- ✅ An opinionated architecture blueprint
+- ✅ A demonstration of professional Git workflow
 
 ---
 
-## 🧱 Architecture Principles
+## 🧱 Architectural Philosophy
 
-1. **Modular but not fragmented** — Clear separation without over-engineering
-2. **Opinionated but extensible** — Strong defaults with customization paths
-3. **Minimal but powerful** — No unnecessary bloat, every dependency justified
-4. **Clean integration** — Each tool added with architectural intent
+### Core Principles
+
+1. **Modular but not fragmented** – Clear boundaries, clean integration
+2. **Opinionated but extensible** – Strong defaults, flexible customization
+3. **Minimal but powerful** – Only essential tools, maximum capability
+4. **No unnecessary bloat** – Every dependency justified
+5. **Clean integration, not package dumping** – Structured, documented additions
+
+### Branch-Based Evolution
+
+Branches are **experimentation spaces**, not permanent stack variants.
+
+```
+default → feature/* → dev → main
+   ↓         ↓        ↓      ↓
+baseline  isolated  integration  stable
+```
+
+Each integration is:
+- **Justified** – Solves real architectural needs
+- **Structured** – Clean implementation, clear boundaries
+- **Future-proof** – Scalable, maintainable patterns
+- **Non-breaking** – Backward compatible, tested
+
+---
+
+## 📦 Technology Stack
+
+### Core Framework
+
+| Technology       | Version | Purpose                                       |
+| ---------------- | ------- | --------------------------------------------- |
+| **Next.js**      | 15.x    | App Router, Server Components, Server Actions |
+| **TypeScript**   | 5.x     | Type safety, developer experience             |
+| **React**        | 19.x    | UI library with concurrent features           |
+| **Tailwind CSS** | 4.x     | Utility-first styling                         |
+
+### Infrastructure
+
+| Technology      | Purpose                   | Status       |
+| --------------- | ------------------------- | ------------ |
+| **Prisma**      | Database ORM (PostgreSQL) | ✅ Integrated |
+| **Better Auth** | Authentication & RBAC     | ✅ Integrated |
+| **Resend**      | Transactional emails      | ✅ Integrated |
+| **React Email** | Email templates           | ✅ Integrated |
+
+### UI & Forms
+
+| Technology          | Purpose                 | Status        |
+| ------------------- | ----------------------- | ------------- |
+| **shadcn/ui**       | Essential UI primitives | ✅ Minimal set |
+| **react-hook-form** | Form state management   | ✅ Integrated  |
+| **Zod**             | Schema validation       | ✅ Integrated  |
+| **next-themes**     | Dark mode support       | ✅ Integrated  |
+| **Sonner**          | Toast notifications     | ✅ Integrated  |
+
+### Data Management
+
+| Technology         | Purpose                 | Status       |
+| ------------------ | ----------------------- | ------------ |
+| **TanStack Query** | Data fetching & caching | ✅ Integrated |
+| **TanStack Table** | Data-heavy UI           | 🔄 Planned    |
+
+### Future Roadmap
+
+- 🔄 File upload strategy (S3/Cloudflare R2)
+- 🔄 Audit log system
+- 🔄 Multi-role management
+- 🔄 Advanced caching strategy
+- 🔄 Webhook infrastructure
+- 🔄 API rate limiting
 
 ---
 
 ## 🌿 Branch Strategy
 
+### Branch Hierarchy
+
 ```
-default     →  Pure Next.js baseline (zero abstraction)
-feature/*   →  Isolated integration per tool/feature
-dev         →  Controlled integration branch (current)
-main        →  Stable production snapshot
+┌─────────────────────────────────────────────────────────────┐
+│                         main (stable)                        │
+│                   Production-ready releases                  │
+└────��────────────────────┬───────────────────────────────────┘
+                          │
+┌─────────────────────────┴───────────────────────────────────┐
+│                      dev (integration)                       │
+│              Controlled integration branch                   │
+└─────────────────────────┬───────────────────────────────────┘
+                          │
+         ┌────────────────┼────────────────┐
+         │                │                │
+┌────────┴──────┐  ┌──────┴──────┐  ┌────┴──────────┐
+│  feature/*    │  │  feature/*  │  │  feature/*    │
+│ (isolated)    │  │ (isolated)  │  │ (isolated)    │
+└────────┬──────┘  └──────┬──────┘  └────┬──────────┘
+         │                │                │
+         └────────────────┼────────────────┘
+                          │
+                  ┌───────┴────────┐
+                  │    default     │
+                  │   (baseline)   │
+                  └────────────────┘
 ```
 
-### Current Branch: `dev`
+### Branch Types
 
-This branch represents the **integration testing ground** where feature branches are merged, validated, and stabilized before reaching `main`.
+| Branch      | Purpose                                  | Lifespan  |
+| ----------- | ---------------------------------------- | --------- |
+| `default`   | Pure Next.js baseline (zero abstraction) | Permanent |
+| `feature/*` | Isolated integration per tool/feature    | Temporary |
+| `dev`       | Controlled integration and testing       | Permanent |
+| `main`      | Stable production-ready releases         | Permanent |
 
-**What's integrated so far:**
-- ✅ **shadcn/ui** — Minimal component infrastructure (New York preset)
-- ✅ **Prisma ORM** — Type-safe database layer with PostgreSQL
-- 🚧 **Better Auth** — Coming soon
-- 🚧 **TanStack Query** — Coming soon
-- 🚧 **TanStack Table** — Coming soon
+### Branch Philosophy
+
+> **"Branch bukan tempat menyimpan variasi permanen stack."**
+> **"Branch adalah ruang eksperimen yang akan disatukan secara disiplin."**
+
+Branches are **not** for permanent stack variants.
+Branches are **experimentation spaces** that merge into `dev` with discipline.
 
 ---
 
-## 📦 Tech Stack
+## 📚 Branch Catalog
 
-### Core
-- **Next.js 16.1.6** — App Router, React Server Components
-- **React 19.2.3** — Latest stable release
-- **TypeScript 5** — Full type safety
+### 🏗️ Infrastructure Branches
 
-### UI Layer
-- **Tailwind CSS v4** — Next-generation CSS architecture
-- **shadcn/ui v3.8.4** — Composable UI primitives (on-demand installation)
-- **Lucide React** — Icon system
-- **Class Variance Authority** — Component variant management
+| Branch                      | Description                                                                                                  | Status     | Dependencies           |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------ | ---------- | ---------------------- |
+| `feature/prisma-setup`      | Database ORM with PostgreSQL adapter, schema management, migration strategy                                  | ✅ Complete | `default`              |
+| `feature/better-auth-setup` | Authentication framework with session management, RBAC foundation, Prisma adapter                            | ✅ Complete | `feature/prisma-setup` |
+| `feature/shadcn-setup`      | Essential UI primitives (Button, Input, Form), Tailwind configuration, CVA patterns                          | ✅ Complete | `default`              |
+| `feature/form-validation`   | Form state management (react-hook-form), schema validation (Zod), type-safe forms                            | ✅ Complete | `default`              |
+| `feature/email-setup`       | Transactional email infrastructure (Resend), React Email templates with Tailwind, development preview server | ✅ Complete | `default`              |
+| `feature/theme-provider`    | Dark mode support (next-themes), theme persistence, consistent theming                                       | ✅ Complete | `default`              |
+| `feature/sonner`            | Toast notification system with success/error feedback, user interaction feedback                             | ✅ Complete | `default`              |
+| `feature/tanstack-query`    | Data fetching and caching strategy, optimistic updates, background sync                                      | ✅ Complete | `default`              |
 
-### Database Layer
-- **Prisma 7.4.0** — Type-safe ORM with migration system
-- **PostgreSQL** — Recommended production database
-- **@prisma/adapter-pg** — Connection pooling for serverless
+### 🎨 Feature Branches
+
+| Branch                     | Description                                                                                                                                                                                 | Status        | Dependencies                                                                                                                    |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `feature/auth-ui`          | Complete authentication UI (login, register, forgot password, reset password, email verification), email templates (verification, reset, welcome), Better Auth integration with email flows | ✅ Complete    | `feature/better-auth-setup`<br>`feature/email-setup`<br>`feature/form-validation`<br>`feature/shadcn-setup`<br>`feature/sonner` |
+| `feature/dashboard-layout` | Protected dashboard layout system, navigation sidebar with theme support, user menu with logout, theme toggle component                                                                     | 🚧 In Progress | `feature/better-auth-setup`<br>`feature/theme-provider`                                                                         |
+
+### 🔄 Future Branches (Planned)
+
+| Branch                        | Description                                                                        | Status    | Dependencies                                              |
+| ----------------------------- | ---------------------------------------------------------------------------------- | --------- | --------------------------------------------------------- |
+| `feature/dashboard-analytics` | Analytics dashboard with data visualization                                        | 🔄 Planned | `feature/dashboard-layout`<br>`feature/tanstack-query`    |
+| `feature/user-management`     | User CRUD operations, role management, user profile                                | 🔄 Planned | `feature/dashboard-layout`<br>`feature/better-auth-setup` |
+| `feature/file-upload`         | File upload infrastructure (S3/Cloudflare R2), image optimization, upload progress | 🔄 Planned | `feature/dashboard-layout`                                |
+| `feature/audit-log`           | System audit trail, user action logging, compliance tracking                       | 🔄 Planned | `feature/prisma-setup`                                    |
+| `feature/api-rate-limiting`   | API rate limiting, request throttling, quota management                            | 🔄 Planned | `default`                                                 |
 
 ---
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js 20+ (LTS recommended)
-- PostgreSQL database (local or hosted)
-- Git
 
-### 1. Clone Repository
+- **Node.js** 20.x or later
+- **PostgreSQL** 15.x or later
+- **pnpm** 9.x or later (recommended)
+
+### Installation
+
 ```bash
+# Clone repository
 git clone https://github.com/rinosaputra/next-branch.git
 cd next-branch
-git checkout dev
-```
 
-### 2. Install Dependencies
-```bash
-npm install
-```
+# Checkout main branch
+git checkout main
 
-### 3. Environment Setup
-Create a `.env` file (copy from `.env.example`):
-```env
-DATABASE_URL="postgresql://user:password@localhost:5432/next_branch_dev"
-```
+# Install dependencies
+pnpm install
 
-### 4. Database Setup
-```bash
-# Run migrations
-npx prisma migrate dev
-
-# Generate Prisma Client
-npx prisma generate
-
-# (Optional) Open Prisma Studio
-npx prisma studio
-```
-
-### 5. Run Development Server
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000)
-
----
-
-## 🧠 Component Philosophy (shadcn/ui)
-
-### ❌ What We DON'T Do
-- Install all 40+ components upfront
-- Create a "component showcase"
-- Add unused dependencies
-
-### ✅ What We DO
-- Install components **on-demand** when features require them
-- Keep dependency tree minimal
-- Maintain clear separation between primitives and composed components
-
-### Installing Components
-```bash
-# Install individual components as needed
-npx shadcn@latest add button
-npx shadcn@latest add form
-npx shadcn@latest add card
-
-# Or multiple at once
-npx shadcn@latest add button input label
-```
-
-Components are installed to `components/ui/` and remain under your control.
-
----
-
-## 🗄️ Database Architecture (Prisma)
-
-### Schema Philosophy
-- **Relational integrity** enforced at database level
-- **Type-safe queries** without manual typing
-- **Migration-first approach** — version-controlled schema evolution
-- **Prepared for scale** — RBAC, audit logs, multi-tenant patterns
-
-### Key Commands
-```bash
-# Create and apply migrations
-npx prisma migrate dev --name descriptive_name
-
-# Reset database (dev only)
-npx prisma migrate reset
-
-# Deploy migrations (production)
-npx prisma migrate deploy
-```
-
-### Example Usage
-```typescript
-// app/api/users/route.ts
-import { prisma } from '@/lib/prisma';
-
-export async function GET() {
-  const users = await prisma.user.findMany();
-  return Response.json(users);
-}
-```
-
----
-
-## 📁 Project Structure
-
-```
-next-branch/
-├── app/                    # Next.js App Router
-│   ├── globals.css         # Tailwind + shadcn theme variables
-│   ├── layout.tsx          # Root layout
-│   └── page.tsx            # Homepage
-├── components/
-│   └── ui/                 # shadcn components (installed on-demand)
-├── lib/
-│   ├── prisma.ts           # Prisma Client singleton
-│   └── utils.ts            # Utility functions (cn, etc.)
-├── hooks/                  # Custom React hooks
-├── types/                  # Shared TypeScript definitions
-├── prisma/
-│   ├── schema.prisma       # Database schema
-│   └── migrations/         # Version-controlled migrations
-├── components.json         # shadcn/ui configuration
-├── next-branch.json        # Package metadata for npm
-├── .env.example            # Environment variable template
-└── package.json
-```
-
----
-
-## 🛠️ Development Workflow
-
-### Adding a New Feature
-1. Create a feature branch: `git checkout -b feature/your-feature`
-2. Implement changes following architectural patterns
-3. Test thoroughly in isolation
-4. Open PR to `dev` for integration testing
-5. After validation, merge to `main`
-
-### Branch Lifecycle
-```
-feature/your-feature → dev → main
-```
-
----
-
-## ⚡ Quick Start (For Contributors)
-
-Want to contribute? Get running in 60 seconds:
-
-```bash
-# 1. Fork & clone
-git clone https://github.com/YOUR_USERNAME/next-branch.git
-cd next-branch
-
-# 2. Install & setup
-npm install
+# Setup environment variables
 cp .env.example .env
-# Edit .env with your DATABASE_URL
 
-# 3. Database
-npx prisma migrate dev
-npx prisma generate
+# Configure your database URL and other variables
+# Edit .env file
 
-# 4. Run
-npm run dev
+# Run database migrations
+pnpm db:push
+
+# Start development server
+pnpm dev
 ```
 
-Now create your feature branch and start building!
+### Environment Variables
 
----
+```env
+# Application
+NEXT_PUBLIC_APP_NAME="Next.js Starter"
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
 
-## 🔗 Roadmap
+# Database (Prisma)
+DATABASE_URL="postgresql://user:password@localhost:5432/next_branch"
 
-### ✅ Completed
-- Next.js baseline setup
-- Tailwind CSS v4 integration
-- shadcn/ui infrastructure
-- Prisma ORM setup with PostgreSQL
+# Better Auth
+BETTER_AUTH_SECRET="your-generated-secret-key"
+BETTER_AUTH_URL="http://localhost:3000"
 
-### 🚧 In Progress
-- Better Auth integration (session-based + OAuth)
-- TanStack Query for server state management
-- TanStack Table for data-heavy UIs
-
-### 🔮 Planned
-- File upload strategy (S3-compatible)
-- Multi-tenant architecture patterns
-- RBAC implementation
-- Audit logging system
-- Email service integration
-- Cache strategy (Redis)
+# Email (Resend)
+RESEND_API_KEY="re_xxx"
+EMAIL_FROM="noreply@yourdomain.com"
+SKIP_EMAIL_SENDING="true"  # Development mode
+```
 
 ---
 
 ## 📖 Documentation
 
-Full integration guides available in respective feature branches:
-- `feature/shadcn-setup` — shadcn/ui configuration & component strategy
-- `feature/prisma-setup` — Database architecture & migration workflow
+### For Users
 
-Unified documentation coming soon in `/docs` folder.
+- [Getting Started Guide](docs/getting-started.md)
+- [Configuration](docs/configuration.md)
+- [Authentication](docs/authentication.md)
+- [Email System](docs/email.md)
+- [Database Schema](docs/database.md)
+
+### For Contributors
+
+- [Contributing Guide](CONTRIBUTING.md)
+- [Branch Strategy](docs/branch-strategy.md)
+- [Code Style Guide](docs/code-style.md)
+- [Testing Guide](docs/testing.md)
+
+---
+
+## 🎨 Features
+
+### ✅ Authentication System
+
+- Email/password authentication with Better Auth
+- Email verification with 24-hour token expiration
+- Password reset with 1-hour token expiration
+- Session management with HTTP-only cookies
+- Protected routes with server-side validation
+- RBAC foundation ready for role-based access
+
+### ✅ Email Infrastructure
+
+- Transactional emails with Resend
+- React Email templates with Tailwind CSS
+- Auto-conversion of Tailwind classes to inline styles
+- Email templates:
+  - Verification email
+  - Password reset email
+  - Welcome email (post-verification)
+- Development preview server (`npm run email:dev`)
+- Browser-based email previews (`/preview/email`)
+
+### ✅ Form Management
+
+- Type-safe forms with react-hook-form + Zod
+- Client-side and server-side validation
+- Accessible form components (ARIA support)
+- Error handling with clear feedback
+- Loading states and submission control
+
+### ✅ UI System
+
+- Dark mode support with next-themes
+- Essential shadcn/ui components (minimal set)
+- Consistent design system with Tailwind
+- Accessible UI primitives
+- Toast notifications with Sonner
+
+### ✅ Data Management
+
+- TanStack Query for data fetching and caching
+- Optimistic updates
+- Background synchronization
+- Request deduplication
+- Automatic refetching
+
+### 🚧 In Progress
+
+- Dashboard layout with protected routes
+- Navigation system with theme support
+- User menu with logout functionality
+
+### 🔄 Planned
+
+- Analytics dashboard
+- User management system
+- File upload infrastructure
+- Audit log system
+- API rate limiting
+
+---
+
+## 🧪 Testing
+
+```bash
+# Run type checking
+pnpm typecheck
+
+# Run linting
+pnpm lint
+
+# Run tests (when implemented)
+pnpm test
+
+# Run Prisma Studio (database GUI)
+pnpm db:studio
+```
+
+---
+
+## 📝 Scripts
+
+```bash
+# Development
+pnpm dev              # Start development server
+pnpm build            # Build for production
+pnpm start            # Start production server
+
+# Database
+pnpm db:push          # Push schema changes to database
+pnpm db:studio        # Open Prisma Studio
+pnpm db:generate      # Generate Prisma Client
+
+# Email
+pnpm email:dev        # Start email preview server
+
+# Code Quality
+pnpm typecheck        # Run TypeScript type checking
+pnpm lint             # Run ESLint
+pnpm format           # Format code with Prettier
+```
+
+---
+
+## 🏗️ Project Structure
+
+```
+next-branch/
+├── app/                          # Next.js App Router
+│   ├── (auth)/                   # Authentication routes
+│   │   ├── login/
+│   │   ├── register/
+│   │   ├── forgot-password/
+│   │   ├── reset-password/[token]/
+│   │   └── verify-email/[token]/
+│   ├── (dashboard)/              # Protected dashboard routes
+│   │   └── dashboard/
+│   ├── preview/                  # Development preview routes
+│   │   └── email/
+│   └── api/                      # API routes
+│
+├── components/                   # React components
+│   ├── ui/                       # shadcn/ui primitives
+│   ├── auth/                     # Authentication components
+│   └── dashboard/                # Dashboard components
+│
+├── lib/                          # Utilities and configurations
+│   ├── auth.ts                   # Better Auth configuration
+│   ├── prisma.ts                 # Prisma client instance
+│   ├── email/                    # Email infrastructure
+│   │   ├── client.ts             # Resend client
+│   │   ├── send.ts               # Email sending utility
+│   │   ├── components/           # Base email components
+│   │   └── templates/            # Email templates
+│   └── validations/              # Zod schemas
+│
+├── prisma/                       # Database schema and migrations
+│   └── schema.prisma
+│
+├── public/                       # Static assets
+├── docs/                         # Documentation
+└── emails/                       # Email preview files (dev only)
+```
 
 ---
 
 ## 🤝 Contributing
 
-This is an **open-source reference architecture**.
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
 ### How to Contribute
-1. Fork the repository
-2. Create a feature branch following our naming convention
-3. Implement changes with clear architectural intent
-4. Submit PR with detailed description
-5. Ensure all tests pass and docs are updated
 
-### Contribution Guidelines
-- Follow the established architectural philosophy
-- Keep integrations clean and justified
-- Document decisions in relevant README files
-- Maintain backward compatibility where possible
+1. **Fork the repository**
+2. **Create feature branch** from `default`:
+   ```bash
+   git checkout -b feature/your-feature default
+   ```
+3. **Make changes** following our [Code Style Guide](docs/code-style.md)
+4. **Test thoroughly** in development mode
+5. **Submit pull request** to `dev` branch
+6. **Wait for review** and address feedback
+
+### Branch Contribution Guidelines
+
+- Infrastructure branches: Branch from `default`, merge to `dev`
+- Feature branches: Branch from `dev` (with infrastructure), merge to `dev`
+- Use `--no-ff` for all merges to preserve history
+- Write descriptive commit messages
+- Update documentation for new features
+
+---
+
+## 🔒 Security
+
+### Reporting Security Issues
+
+If you discover a security vulnerability, please email **security@example.com** instead of using the issue tracker.
+
+### Security Features
+
+- ✅ HTTP-only cookies for sessions
+- ✅ CSRF protection with Better Auth
+- ✅ Password hashing with bcrypt
+- ✅ Secure token generation
+- ✅ Token expiration (24h verification, 1h reset)
+- ✅ Email verification required in production
+- ✅ Server-side session validation
+- ✅ Type-safe API with TypeScript
 
 ---
 
 ## 📄 License
 
-MIT License
-
-Copyright (c) 2026 Rino Saputra
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED.
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 🔗 Links
+## 🙏 Acknowledgments
 
-- **Repository**: [github.com/rinosaputra/next-branch](https://github.com/rinosaputra/next-branch)
-- **Issues**: [github.com/rinosaputra/next-branch/issues](https://github.com/rinosaputra/next-branch/issues)
-- **Discussions**: [github.com/rinosaputra/next-branch/discussions](https://github.com/rinosaputra/next-branch/discussions)
+### Technologies
+
+- [Next.js](https://nextjs.org) - The React Framework for Production
+- [Better Auth](https://better-auth.com) - Type-safe authentication
+- [Prisma](https://prisma.io) - Next-generation ORM
+- [Resend](https://resend.com) - Email for developers
+- [React Email](https://react.email) - Email templates with React
+- [shadcn/ui](https://ui.shadcn.com) - Re-usable components
+- [TanStack Query](https://tanstack.com/query) - Powerful data synchronization
+- [Tailwind CSS](https://tailwindcss.com) - Utility-first CSS framework
+
+### Inspiration
+
+This architecture is inspired by production-grade systems and modern engineering practices:
+- Clean architecture principles
+- Domain-driven design
+- Branch-based development workflow
+- Feature isolation patterns
+- Progressive enhancement
 
 ---
 
-**Built with discipline. Designed for scale. Open for all.**
+## 📞 Contact
+
+- **GitHub**: [@rinosaputra](https://github.com/rinosaputra)
+- **Repository**: [next-branch](https://github.com/rinosaputra/next-branch)
+- **Issues**: [GitHub Issues](https://github.com/rinosaputra/next-branch/issues)
+
+---
+
+## 🌟 Star History
+
+If you find this project helpful, please consider giving it a star ⭐
+
+[![Star History Chart](https://api.star-history.com/svg?repos=rinosaputra/next-branch&type=Date)](https://star-history.com/#rinosaputra/next-branch&Date)
+
+---
+
+## 📊 Repository Stats
+
+![GitHub Stars](https://img.shields.io/github/stars/rinosaputra/next-branch?style=social)
+![GitHub Forks](https://img.shields.io/github/forks/rinosaputra/next-branch?style=social)
+![GitHub Issues](https://img.shields.io/github/issues/rinosaputra/next-branch)
+![GitHub Pull Requests](https://img.shields.io/github/issues-pr/rinosaputra/next-branch)
+
+---
+
+<div align="center">
+
+**Built with discipline. Designed for scale.**
+
+*Part of the next-branch architecture initiative.*
+
+[⬆ Back to Top](#-next-branch)
+
+</div>
