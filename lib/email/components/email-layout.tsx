@@ -47,7 +47,7 @@ export function EmailLayout({ children, preview }: EmailLayoutProps) {
         }}
       >
         {preview && (
-          <Text className="hidden overflow-hidden leading-[0]">
+          <Text className="hidden overflow-hidden leading-0">
             {preview}
           </Text>
         )}
