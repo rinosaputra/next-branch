@@ -11,7 +11,7 @@ interface VerificationEmailProps {
 export function VerificationEmail({ userName, verificationUrl }: VerificationEmailProps) {
   return (
     <EmailLayout preview="Verify your email address">
-      <Section className="space-y-4">
+      <Section className="space-y-4 text-center">
         <Heading className="text-2xl font-bold text-gray-900 mb-5">
           Welcome to {process.env.NEXT_PUBLIC_APP_NAME}!
         </Heading>

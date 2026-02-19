@@ -10,7 +10,7 @@ interface ResetPasswordEmailProps {
 export function ResetPasswordEmail({ userName, resetUrl }: ResetPasswordEmailProps) {
   return (
     <EmailLayout preview="Reset your password">
-      <Section className="space-y-4">
+      <Section className="space-y-4 text-center">
         <Heading className="text-2xl font-bold text-gray-900 mb-5">
           Password Reset Request
         </Heading>

@@ -147,6 +147,8 @@ export function WelcomeEmail({ userName, dashboardUrl }: WelcomeEmailProps) {
           </Section>
         </Section>
 
+        <Hr className="border-gray-300 my-6" />
+
         {/* Footer Message */}
         <Section className="mt-6">
           <Text className="text-sm text-gray-600 text-center leading-6">
