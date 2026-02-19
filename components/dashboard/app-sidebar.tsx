@@ -17,8 +17,11 @@ import {
 } from "@/components/ui/sidebar"
 import { NavMain } from "./nav-main"
 import { NavSecondary } from "./nav-secondary"
+import { User } from "@/lib/auth"
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({ user, ...props }: React.ComponentProps<typeof Sidebar> & {
+  user: User
+}) {
   return (
     <Sidebar
       className="top-(--header-height) h-[calc(100svh-var(--header-height))]!"
@@ -46,11 +49,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavSecondary items={[]} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser {...{
-          name: "shadcn",
-          email: "m@example.com",
-          avatar: "/avatars/shadcn.jpg",
-        }} />
+        <NavUser {...user} />
       </SidebarFooter>
     </Sidebar>
   )

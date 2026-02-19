@@ -29,13 +29,21 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import { User } from "@/lib/auth"
+import { useMemo } from "react"
 
-export function NavUser(user: {
-  name: string
-  email: string
-  avatar: string
-}) {
+export function NavUser(user: User) {
   const { isMobile } = useSidebar()
+  const name = user.name || "No name"
+  const short = useMemo(() => {
+    const names = name.split(" ")
+    if (names.length === 1) {
+      return names[0].slice(0, 2).toUpperCase()
+    }
+    return (
+      names[0][0].toUpperCase() + names[names.length - 1][0].toUpperCase()
+    )
+  }, [name])
 
   return (
     <SidebarMenu>
@@ -47,8 +55,10 @@ export function NavUser(user: {
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                {user.image ? <>
+                  <AvatarImage src={user.image} alt={user.name} />
+                  <AvatarFallback className="rounded-lg">{short}</AvatarFallback>
+                </> : <AvatarFallback className="rounded-lg">{short}</AvatarFallback>}
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{user.name}</span>
@@ -66,8 +76,10 @@ export function NavUser(user: {
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  {user.image ? <>
+                    <AvatarImage src={user.image} alt={user.name} />
+                    <AvatarFallback className="rounded-lg">{short}</AvatarFallback>
+                  </> : <AvatarFallback className="rounded-lg">{short}</AvatarFallback>}
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">{user.name}</span>
