@@ -2,8 +2,6 @@
 import { requirePermission } from '@/lib/auth/rbac-utils'
 import { UserList } from '@/components/rbac/user-list'
 import { createMetadata } from '@/lib/metadata'
-import { headers } from 'next/headers'
-import { auth } from '@/lib/auth'
 
 export const metadata = createMetadata({
   title: "User Management",
@@ -11,10 +9,6 @@ export const metadata = createMetadata({
 })
 
 export default async function UsersPage() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  })
-  console.log("Current user session:", session)
   // ✅ Server-side permission check
   await requirePermission('user', ['read'])
 
