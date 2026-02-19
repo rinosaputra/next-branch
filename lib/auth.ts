@@ -18,24 +18,12 @@ export const auth = betterAuth({
 
     // Email verification (optional, recommended for production)
     requireEmailVerification: process.env.NODE_ENV === 'production',
-    sendVerificationEmail: async (props) => {
-      try {
-        await sendEmail({
-          to: user.email,
-          subject: `Verify your email - ${process.env.NEXT_PUBLIC_APP_NAME}`,
-          react: VerificationEmail({
-            userName: user.name || 'there',
-            verificationUrl: url,
-          }),
-        })
-      } catch (error) {
-        console.error('Failed to send verification email:', error)
-        // Don't throw - Better Auth will handle gracefully
-      }
-    },
 
     // Password reset (CRITICAL for forgot-password flow)
     sendResetPassword: async ({ user, url }) => {
+      if (process.env.NODE_ENV === 'development') {
+        console.log(`🔐 Sending password reset email \nto: ${user.email}\nwith URL: ${url}`) // Debug log
+      }
       try {
         await sendEmail({
           to: user.email,
@@ -55,12 +43,29 @@ export const auth = betterAuth({
     resetPasswordTokenExpiresIn: 3600,
 
     // Optional: Callback after successful password reset
-    onPasswordReset: async ({ user }, request) => {
+    onPasswordReset: async ({ user }) => {
       if (process.env.NODE_ENV === 'development') {
         console.log(`✅ Password reset successful for: ${user.email}`)
       }
 
       // Optional: Send confirmation email, log audit, etc.
+    },
+  },
+  emailVerification: {
+    sendVerificationEmail: async ({ user, url }) => {
+      try {
+        await sendEmail({
+          to: user.email,
+          subject: `Verify your email - ${process.env.NEXT_PUBLIC_APP_NAME}`,
+          react: VerificationEmail({
+            userName: user.name || 'there',
+            verificationUrl: url,
+          }),
+        })
+      } catch (error) {
+        console.error('Failed to send verification email:', error)
+        // Don't throw - Better Auth will handle gracefully
+      }
     },
   }
 })
