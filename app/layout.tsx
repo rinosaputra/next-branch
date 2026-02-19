@@ -4,6 +4,7 @@ import { createMetadata } from "@/lib/metadata";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { QueryProvider } from "@/lib/react-query/provider";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,10 +35,11 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <QueryProvider>
-            {children}
+            <TooltipProvider>{children}</TooltipProvider>
           </QueryProvider>
           <Toaster />
         </ThemeProvider>
+        <Toaster />
       </body>
     </html>
   );
