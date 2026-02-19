@@ -28,7 +28,7 @@ export function UserList() {
     <div className="rounded-lg border">
       <table className="w-full">
         <thead>
-          <tr className="border-b bg-gray-50">
+          <tr className="border-b">
             <th className="p-3 text-left">Name</th>
             <th className="p-3 text-left">Email</th>
             <th className="p-3 text-left">Role</th>
@@ -41,7 +41,7 @@ export function UserList() {
               <td className="p-3">{user.name}</td>
               <td className="p-3">{user.email}</td>
               <td className="p-3">
-                <span className="rounded bg-blue-100 px-2 py-1 text-xs">
+                <span className="rounded px-2 py-1 text-xs">
                   {user.role || 'viewer'}
                 </span>
               </td>
