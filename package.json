@@ -1,30 +1,7 @@
 {
-  "name": "next-branch",
-  "version": "0.1.0",
-  "private": false,
-  "description": "Opinionated fullstack Next.js starter template for experimenting and integrating modern packages like Prisma, Better Auth, shadcn/ui, and TanStack.",
   "author": "Rino Saputra",
-  "license": "MIT",
-  "homepage": "https://github.com/rinosaputra/next-branch",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/rinosaputra/next-branch.git"
-  },
   "bugs": {
     "url": "https://github.com/rinosaputra/next-branch/issues"
-  },
-  "keywords": [
-    "nextjs",
-    "nextjs-starter",
-    "fullstack",
-    "boilerplate",
-    "typescript"
-  ],
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.4.0",
@@ -33,9 +10,11 @@
     "dotenv": "^17.3.1",
     "next": "16.1.6",
     "pg": "^8.18.0",
+    "next-themes": "^0.4.6",
     "react": "19.2.3",
     "react-dom": "19.2.3"
   },
+  "description": "Opinionated fullstack Next.js starter template for experimenting and integrating modern packages like Prisma, Better Auth, shadcn/ui, and TanStack.",
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20.19.33",
@@ -47,5 +26,27 @@
     "prisma": "^7.4.0",
     "tailwindcss": "^4",
     "typescript": "^5"
-  }
+  },
+  "homepage": "https://github.com/rinosaputra/next-branch",
+  "keywords": [
+    "nextjs",
+    "nextjs-starter",
+    "fullstack",
+    "boilerplate",
+    "typescript"
+  ],
+  "license": "MIT",
+  "name": "next-branch",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rinosaputra/next-branch.git"
+  },
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev",
+    "lint": "eslint",
+    "start": "next start"
+  },
+  "version": "0.1.0"
 }
