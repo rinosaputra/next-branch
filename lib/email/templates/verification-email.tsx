@@ -1,3 +1,4 @@
+// lib/email/templates/verification-email.tsx
 import * as React from 'react'
 import { EmailLayout } from '@/lib/email/components/email-layout'
 import { Heading, Text, Button, Section } from '@react-email/components'

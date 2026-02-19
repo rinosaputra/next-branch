@@ -1,3 +1,4 @@
+// / lib/email/send.ts
 import { resend } from './client'
 import * as React from 'react'
 import { render } from '@react-email/render'
@@ -49,7 +50,7 @@ export async function sendEmail({
   // Convert React component to HTML if provided
   let emailHtml = html
   if (react && !html) {
-    emailHtml = render(react)
+    emailHtml = await render(react)
   }
 
   // Skip email sending in development (log to console instead)
@@ -59,6 +60,7 @@ export async function sendEmail({
     console.log('Subject:', subject)
     if (emailHtml) console.log('HTML Content:', emailHtml.substring(0, 100) + '...')
     if (react) {
+      // @ts-ignore
       const componentName = react.type?.name || react.type?.displayName || 'React component'
       console.log('React Email Template:', componentName)
     }
@@ -70,6 +72,7 @@ export async function sendEmail({
       from: process.env.EMAIL_FROM || 'onboarding@resend.dev',
       to: Array.isArray(to) ? to : [to],
       subject,
+      react,
       html: emailHtml,
     })
 

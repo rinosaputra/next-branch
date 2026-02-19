@@ -35,6 +35,7 @@ export const auth = betterAuth({
         })
       } catch (error) {
         console.error('Failed to send password reset email:', error)
+        throw new Error('Failed to send password reset email') // Throw to trigger retry logic in Better Auth
         // Don't throw - Better Auth will handle gracefully
       }
     },
@@ -64,6 +65,7 @@ export const auth = betterAuth({
         })
       } catch (error) {
         console.error('Failed to send verification email:', error)
+        throw new Error('Failed to send verification email') // Throw to trigger retry logic in Better Auth
         // Don't throw - Better Auth will handle gracefully
       }
     },
