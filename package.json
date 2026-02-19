@@ -4,12 +4,16 @@
     "url": "https://github.com/rinosaputra/next-branch/issues"
   },
   "dependencies": {
+    "@react-email/components": "^1.0.8",
     "next": "16.1.6",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "react-email": "^5.2.8",
+    "resend": "^6.9.2"
   },
   "description": "Opinionated fullstack Next.js starter template for experimenting and integrating modern packages like Prisma, Better Auth, shadcn/ui, and TanStack.",
   "devDependencies": {
+    "@react-email/render": "^2.0.4",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
