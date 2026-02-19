@@ -4,6 +4,8 @@ import { prisma } from '@/lib/prisma'
 import { sendEmail } from './email/send'
 import { VerificationEmail } from './email/templates/verification-email'
 import { ResetPasswordEmail } from './email/templates/reset-password-email'
+import { admin } from 'better-auth/plugins'
+import { ac, roles } from './auth/permissions'
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -69,7 +71,15 @@ export const auth = betterAuth({
         // Don't throw - Better Auth will handle gracefully
       }
     },
-  }
+  },
+  plugins: [
+    admin({
+      ac,
+      roles,
+      defaultRole: "viewer",
+      adminUserIds: []
+    })
+  ]
 })
 
 type Auth = typeof auth.$Infer.Session

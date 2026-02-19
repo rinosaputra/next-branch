@@ -28,17 +28,16 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <QueryProvider>
+        <QueryProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
             <TooltipProvider>{children}</TooltipProvider>
-          </QueryProvider>
-          <Toaster />
-        </ThemeProvider>
+          </ThemeProvider>
+        </QueryProvider>
         <Toaster />
       </body>
     </html>
