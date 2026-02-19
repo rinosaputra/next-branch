@@ -1,6 +1,6 @@
 "use client"
 
-import { SidebarIcon } from "lucide-react"
+import { Command, SidebarIcon } from "lucide-react"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -44,7 +44,7 @@ function CreateBreadcrumbs() {
         <div key={item.href} className="flex items-center gap-2">
           {index > 0 && <BreadcrumbSeparator />}
 
-          <BreadcrumbItem>
+          <BreadcrumbItem className="capitalize">
             {index === breadcrumbItems.length - 1 ? (
               <BreadcrumbPage>{item.label}</BreadcrumbPage>
             ) : (
@@ -76,7 +76,15 @@ export function SiteHeader() {
 
   return (
     <header className="bg-background sticky top-0 z-50 flex w-full items-center border-b">
-      <div className="flex h-(--header-height) w-full items-center gap-2 px-4">
+      <div className="flex h-(--header-height) w-full items-center gap-2">
+        <Button
+          variant="ghost"
+          size="lg"
+        >
+          <Command />
+          <span className="hidden sm:block">{process.env.NEXT_PUBLIC_APP_NAME || "My App"}</span>
+        </Button>
+        <Separator orientation="vertical" className="h-4" />
         <Button
           className="size-8"
           variant="ghost"
@@ -90,7 +98,7 @@ export function SiteHeader() {
         <CreateBreadcrumbs />
 
         {/* Theme Toggle */}
-        <div className="ml-auto">
+        <div className="ml-auto mr-2">
           <ThemeToggle />
         </div>
       </div>

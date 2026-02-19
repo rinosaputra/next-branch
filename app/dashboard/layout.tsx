@@ -21,7 +21,7 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
       <SidebarProvider className="flex flex-col">
         <SiteHeader />
         <div className="flex flex-1">
-          <AppSidebar />
+          <AppSidebar user={session.user} />
           <SidebarInset>
             {children}
           </SidebarInset>
