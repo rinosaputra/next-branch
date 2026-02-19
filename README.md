@@ -45,6 +45,8 @@ Once validated, it will be merged into `dev` as part of the controlled integrati
 DATABASE_URL="postgresql://user:password@localhost:5432/dbname"
 BETTER_AUTH_SECRET="your-secret-key-here"
 BETTER_AUTH_URL="http://localhost:3000" # or production URL
+NEXT_PUBLIC_LOGIN_URL="/login"
+NEXT_PUBLIC_DASHBOARD_URL="/dashboard"
 ```
 
 ---
@@ -62,6 +64,8 @@ Create a `.env` file with:
 DATABASE_URL="postgresql://user:password@localhost:5432/next_branch_dev"
 BETTER_AUTH_SECRET="generate-a-secure-random-string"
 BETTER_AUTH_URL="http://localhost:3000"
+NEXT_PUBLIC_LOGIN_URL="/login"
+NEXT_PUBLIC_DASHBOARD_URL="/dashboard"
 ```
 
 > **Note:** Generate `BETTER_AUTH_SECRET` using:
@@ -269,6 +273,8 @@ If working on this branch:
 | `DATABASE_URL` | ✅ Yes | PostgreSQL connection string |
 | `BETTER_AUTH_SECRET` | ✅ Yes | Secret key for session encryption |
 | `BETTER_AUTH_URL` | ✅ Yes | Base URL of your app (e.g., `http://localhost:3000`) |
+| `NEXT_PUBLIC_LOGIN_URL` | ✅ Yes |  |
+| `NEXT_PUBLIC_DASHBOARD_URL` | ✅ Yes |  |
 
 ---
 
