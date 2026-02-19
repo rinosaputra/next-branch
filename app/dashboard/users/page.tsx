@@ -1,6 +1,6 @@
 // app/dashboard/users/page.tsx
 import { requirePermission } from '@/lib/auth/rbac-utils'
-import { UserList } from '@/components/dashboard/user-list'
+import { UserList } from '@/components/rbac/user-list'
 
 export default async function UsersPage() {
   // ✅ Server-side permission check
