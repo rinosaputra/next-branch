@@ -10,3 +10,5 @@ export interface NavMainItem {
   title: string
   items: NavItem[]
 }
+
+export type NavSecondaryItem = NavItem
