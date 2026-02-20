@@ -1,8 +1,7 @@
 // components/rbac/require-permission.tsx
 "use client"
 
-import { authClient } from "@/lib/auth-client"
-import { useQuery } from "@tanstack/react-query"
+import { usePermission } from "@/hooks/use-permission"
 
 interface RequirePermissionProps {
   resource: string
@@ -17,21 +16,8 @@ export function RequirePermission({
   children,
   fallback = null
 }: RequirePermissionProps) {
-  const { data, isLoading } = useQuery({
-    queryKey: ["has-permission", resource, actions],
-    queryFn: async () => {
-      const result = await authClient.admin.hasPermission({
-        permissions: {
-          [resource]: actions
-        }
-      })
-
-      return result.data
-    }
-  })
-
-  if (isLoading) return null
-  if (!data) return <>{fallback}</>
-
+  const { hasPermission, loading } = usePermission(resource, actions)
+  if (loading) return null
+  if (!hasPermission) return <>{fallback}</>
   return <>{children}</>
 }
