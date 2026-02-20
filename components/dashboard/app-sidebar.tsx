@@ -14,6 +14,7 @@ import {
 import { NavMain } from "./nav-main"
 import { NavSecondary } from "./nav-secondary"
 import { User } from "@/lib/auth"
+import { navMainItems, navSecondaryItems } from "./config"
 
 export function AppSidebar({ user, ...props }: React.ComponentProps<typeof Sidebar> & {
   user: User
@@ -24,8 +25,8 @@ export function AppSidebar({ user, ...props }: React.ComponentProps<typeof Sideb
       {...props}
     >
       <SidebarContent>
-        <NavMain items={[]} />
-        <NavSecondary items={[]} className="mt-auto" />
+        <NavMain items={navMainItems} />
+        <NavSecondary items={navSecondaryItems} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
         <NavUser {...user} />
