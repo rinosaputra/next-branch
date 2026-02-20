@@ -50,3 +50,5 @@ export const roles = {
   editor,
   admin,
 } as const
+
+export type Role = keyof typeof roles
