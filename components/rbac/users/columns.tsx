@@ -6,10 +6,32 @@ import { Badge } from "@/components/ui/badge"
 import { DataTableColumnHeader } from "@/components/table/data-table-column-header"
 import { UserRowActions } from "./user-row-actions"
 import { UserWithRole } from "better-auth/plugins"
+import { formatDistanceToNow } from "date-fns"
+import { RoleBadge } from "./role-badge"
 
 // Type definition (should match your Prisma User model)
 export type User = UserWithRole
 
+
+
+/**
+ * User table column definitions
+ *
+ * Features:
+ * - Row selection (checkboxes)
+ * - Sortable columns (name, email, created date)
+ * - Filterable columns (role, status)
+ * - Role badge with colors
+ * - Status badge (active/banned)
+ * - RBAC-aware row actions
+ *
+ * @example
+ * ```tsx
+ * import { userColumns } from "@/components/rbac/columns"
+ *
+ * <DataTable columns={userColumns} data={users} />
+ * ```
+ */
 export const userColumns: ColumnDef<User>[] = [
   {
     id: "select",
@@ -20,7 +42,7 @@ export const userColumns: ColumnDef<User>[] = [
           (table.getIsSomePageRowsSelected() && "indeterminate")
         }
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
+        aria-label="Select all users"
         className="translate-y-0.5"
       />
     ),
@@ -28,7 +50,7 @@ export const userColumns: ColumnDef<User>[] = [
       <Checkbox
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
+        aria-label="Select user"
         className="translate-y-0.5"
       />
     ),
@@ -41,10 +63,20 @@ export const userColumns: ColumnDef<User>[] = [
       <DataTableColumnHeader column={column} title="Name" />
     ),
     cell: ({ row }) => {
+      const name = row.getValue("name") as string
+      const image = row.original.image
+
       return (
-        <div className="flex space-x-2">
-          <span className="max-w-125 truncate font-medium">
-            {row.getValue("name")}
+        <div className="flex items-center space-x-2">
+          {image && (
+            <img
+              src={image}
+              alt={name}
+              className="h-8 w-8 rounded-full"
+            />
+          )}
+          <span className="max-w-50 truncate font-medium">
+            {name}
           </span>
         </div>
       )
@@ -56,9 +88,17 @@ export const userColumns: ColumnDef<User>[] = [
       <DataTableColumnHeader column={column} title="Email" />
     ),
     cell: ({ row }) => {
+      const email = row.getValue("email") as string
+      const verified = row.original.emailVerified
+
       return (
-        <div className="flex w-45 items-center">
-          <span className="truncate">{row.getValue("email")}</span>
+        <div className="flex items-center space-x-2">
+          <span className="max-w-45 truncate">{email}</span>
+          {verified && (
+            <Badge variant="outline" className="ml-2 text-xs">
+              Verified
+            </Badge>
+          )}
         </div>
       )
     },
@@ -68,37 +108,38 @@ export const userColumns: ColumnDef<User>[] = [
     header: "Role",
     cell: ({ row }) => {
       const role = row.getValue("role") as string | null
-
-      if (!role) {
-        return <Badge variant="outline">viewer</Badge>
-      }
-
-      const roleVariant =
-        role === "admin" ? "default" :
-          role === "editor" ? "secondary" :
-            "outline"
-
-      return (
-        <Badge variant={roleVariant} className="capitalize">
-          {role}
-        </Badge>
-      )
+      return <RoleBadge role={role} />
     },
     filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id))
+      const role = row.getValue(id) as string | null
+      const displayRole = role || "viewer"
+      return value.includes(displayRole)
     },
   },
   {
-    accessorKey: "banned",
+    id: "status",
     header: "Status",
     cell: ({ row }) => {
-      const banned = row.getValue("banned") as boolean | null
+      const banned = row.original.banned
+      const banExpires = row.original.banExpires
 
       if (banned) {
+        const isPermanent = !banExpires
+        const isExpired = banExpires && new Date(banExpires) < new Date()
+
+        if (isExpired) {
+          return <Badge variant="secondary">Ban Expired</Badge>
+        }
+
         return (
-          <Badge variant="destructive">
-            Banned
-          </Badge>
+          <div className="flex items-center space-x-2">
+            <Badge variant="destructive">Banned</Badge>
+            {!isPermanent && (
+              <span className="text-xs text-muted-foreground">
+                Expires {formatDistanceToNow(new Date(banExpires), { addSuffix: true })}
+              </span>
+            )}
+          </div>
         )
       }
 
@@ -109,9 +150,9 @@ export const userColumns: ColumnDef<User>[] = [
       )
     },
     filterFn: (row, id, value) => {
-      const banned = row.getValue(id) as boolean | null
-      if (value.includes("banned")) return !!banned
+      const banned = row.original.banned
       if (value.includes("active")) return !banned
+      if (value.includes("banned")) return !!banned
       return true
     },
   },
@@ -123,8 +164,8 @@ export const userColumns: ColumnDef<User>[] = [
     cell: ({ row }) => {
       const date = new Date(row.getValue("createdAt"))
       return (
-        <div className="flex w-25 items-center">
-          <span>{date.toLocaleDateString()}</span>
+        <div className="flex w-35 items-center">
+          <span className="text-sm">{date.toLocaleDateString()}</span>
         </div>
       )
     },
