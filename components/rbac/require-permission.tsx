@@ -2,7 +2,7 @@
 "use client"
 
 import { authClient } from "@/lib/auth-client"
-import { useEffect, useState } from "react"
+import { useQuery } from "@tanstack/react-query"
 
 interface RequirePermissionProps {
   resource: string
@@ -17,22 +17,21 @@ export function RequirePermission({
   children,
   fallback = null
 }: RequirePermissionProps) {
-  const [hasPermission, setHasPermission] = useState(false)
-  const [loading, setLoading] = useState(true)
+  const { data, isLoading } = useQuery({
+    queryKey: ["has-permission", resource, actions],
+    queryFn: async () => {
+      const result = await authClient.admin.hasPermission({
+        permissions: {
+          [resource]: actions
+        }
+      })
 
-  useEffect(() => {
-    authClient.admin.hasPermission({
-      permissions: {
-        [resource]: actions
-      }
-    }).then(result => {
-      setHasPermission(!!result.data)
-      setLoading(false)
-    })
-  }, [resource, actions])
+      return result.data
+    }
+  })
 
-  if (loading) return null
-  if (!hasPermission) return <>{fallback}</>
+  if (isLoading) return null
+  if (!data) return <>{fallback}</>
 
   return <>{children}</>
 }
