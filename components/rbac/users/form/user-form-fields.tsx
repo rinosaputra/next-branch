@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
 import { Eye, EyeOff } from "lucide-react"
+import { roles } from "./user-schema"
 
 /**
  * Shared user form fields
@@ -134,35 +135,21 @@ export function UserFormFields({ form, isEditMode = false }: UserFormFieldsProps
             <FormLabel>Role</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger>
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select a role" />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                <SelectItem value="viewer">
-                  <div className="flex flex-col items-start gap-1">
-                    <span className="font-medium">Viewer</span>
-                    <span className="text-xs text-muted-foreground">
-                      Read-only access to content
-                    </span>
-                  </div>
-                </SelectItem>
-                <SelectItem value="editor">
-                  <div className="flex flex-col items-start gap-1">
-                    <span className="font-medium">Editor</span>
-                    <span className="text-xs text-muted-foreground">
-                      Can create and edit content
-                    </span>
-                  </div>
-                </SelectItem>
-                <SelectItem value="admin">
-                  <div className="flex flex-col items-start gap-1">
-                    <span className="font-medium">Administrator</span>
-                    <span className="text-xs text-muted-foreground">
-                      Full system access and user management
-                    </span>
-                  </div>
-                </SelectItem>
+                {roles.map((role) => (
+                  <SelectItem key={role.value} value={role.value}>
+                    <div className="flex flex-col items-start gap-1">
+                      <span className="font-medium">{role.label}</span>
+                      <span className="text-xs text-muted-foreground">
+                        {role.description}
+                      </span>
+                    </div>
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
             <FormDescription>

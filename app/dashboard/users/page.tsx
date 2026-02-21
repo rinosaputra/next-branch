@@ -23,7 +23,7 @@ export default async function UsersPage() {
   await requirePermission("user", ["read"])
 
   return (
-    <div className="flex flex-1 flex-col gap-6 p-4 px-6 md:px-8">
+    <div className="flex flex-1 flex-col gap-6 p-4 pt-0">
       {/* Page Header */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div className="space-y-1">

@@ -69,6 +69,7 @@ import { Input } from "@/components/ui/input"
 import { usePermission } from "@/hooks/use-permission"
 import { User } from "./columns"
 import { authClient } from "@/lib/auth-client"
+import { createUserSchema, roles } from "./form/user-schema"
 
 interface UserRowActionsProps {
   row: Row<User>
@@ -90,11 +91,7 @@ type PasswordFormValues = z.infer<typeof passwordSchema>
 /**
  * Role change validation schema
  */
-const roleSchema = z.object({
-  role: z.enum(["viewer", "editor", "admin"], {
-    required_error: "Please select a role",
-  }),
-})
+const roleSchema = createUserSchema.pick({ role: true })
 
 type RoleFormValues = z.infer<typeof roleSchema>
 
@@ -326,7 +323,7 @@ export function UserRowActions({ row }: UserRowActionsProps) {
             <span className="sr-only">Open menu</span>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-[200px]">
+        <DropdownMenuContent align="end" className="w-50">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
 
@@ -500,35 +497,21 @@ export function UserRowActions({ row }: UserRowActionsProps) {
                     <FormLabel>Role</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className="w-full">
                           <SelectValue placeholder="Select a role" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="viewer">
-                          <div className="flex flex-col items-start gap-1">
-                            <span className="font-medium">Viewer</span>
-                            <span className="text-xs text-muted-foreground">
-                              Read-only access to content
-                            </span>
-                          </div>
-                        </SelectItem>
-                        <SelectItem value="editor">
-                          <div className="flex flex-col items-start gap-1">
-                            <span className="font-medium">Editor</span>
-                            <span className="text-xs text-muted-foreground">
-                              Can create and edit content
-                            </span>
-                          </div>
-                        </SelectItem>
-                        <SelectItem value="admin">
-                          <div className="flex flex-col items-start gap-1">
-                            <span className="font-medium">Administrator</span>
-                            <span className="text-xs text-muted-foreground">
-                              Full system access and user management
-                            </span>
-                          </div>
-                        </SelectItem>
+                        {roles.map((role) => (
+                          <SelectItem key={role.value} value={role.value}>
+                            <div className="flex flex-col items-start gap-1">
+                              <span className="font-medium">{role.label}</span>
+                              <span className="text-xs text-muted-foreground">
+                                {role.description}
+                              </span>
+                            </div>
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     <FormDescription>

@@ -13,6 +13,7 @@ import Link from "next/link"
 import { ArrowLeft, UserCog, AlertTriangle, Key, Mail, Ban } from "lucide-react"
 import { createMetadata } from "@/lib/metadata"
 import { EditUserForm } from "@/components/rbac/users/form/edit-user-form"
+import EditUserQuickAction from "@/components/rbac/users/form/edit-user-quick-action"
 
 /**
  * Generate metadata dynamically based on user
@@ -48,10 +49,12 @@ export default async function EditUserPage({ params }: EditUserPageProps) {
   const session = await auth.api.getSession({
     headers: await headers(),
   })
-  const id = (await params).id
 
   // ✅ Server-side RBAC check
   await requirePermission("user", ["update"])
+
+  // ✅ Fetch user data
+  const id = (await params).id
   const user = await auth.api.getUser({
     headers: await headers(),
     query: {
@@ -59,9 +62,7 @@ export default async function EditUserPage({ params }: EditUserPageProps) {
     }
   })
 
-  // ✅ Fetch user data
-  // In production: Fetch from database via API
-  // const user = await fetchUserById(params.id)
+  // If user not found, show 404 page
   if (!(user && session)) notFound()
 
 
@@ -174,70 +175,9 @@ export default async function EditUserPage({ params }: EditUserPageProps) {
           </Card>
 
           {/* Quick Actions */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">Quick Actions</CardTitle>
-              <CardDescription className="text-xs">
-                Perform common user management tasks
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              {/* Password Reset */}
-              <Button
-                variant="outline"
-                size="sm"
-                className="w-full justify-start"
-                asChild
-              >
-                <Link href="#" onClick={(e) => {
-                  e.preventDefault()
-                  // In production: Trigger password reset
-                  alert("Password reset email would be sent")
-                }}>
-                  <Key className="mr-2 h-4 w-4" />
-                  Reset Password
-                </Link>
-              </Button>
-
-              {/* Send Email */}
-              <Button
-                variant="outline"
-                size="sm"
-                className="w-full justify-start"
-                asChild
-              >
-                <Link href="#" onClick={(e) => {
-                  e.preventDefault()
-                  // In production: Open email compose
-                  alert("Email compose would open")
-                }}>
-                  <Mail className="mr-2 h-4 w-4" />
-                  Send Email
-                </Link>
-              </Button>
-
-              <Separator />
-
-              {/* Ban/Unban User */}
-              {currentUserRole === "admin" && !isOwnAccount && (
-                <Button
-                  variant={user.banned ? "outline" : "destructive"}
-                  size="sm"
-                  className="w-full justify-start"
-                  asChild
-                >
-                  <Link href="#" onClick={(e) => {
-                    e.preventDefault()
-                    // In production: Ban/unban user
-                    alert(user.banned ? "User would be unbanned" : "User would be banned")
-                  }}>
-                    <Ban className="mr-2 h-4 w-4" />
-                    {user.banned ? "Unban User" : "Ban User"}
-                  </Link>
-                </Button>
-              )}
-            </CardContent>
-          </Card>
+          <EditUserQuickAction user={{
+            banned: user.banned || false
+          }} currentUserRole={currentUserRole || "viewer"} isOwnAccount={isOwnAccount} />
 
           {/* Help Text */}
           <Alert>

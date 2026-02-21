@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button"
 import { Form } from "@/components/ui/form"
 import { UserFormFields } from "./user-form-fields"
 import { Loader2 } from "lucide-react"
-import { UserFormValues, userSchema } from "./user-schema"
+import { CreateUserFormValues, createUserSchema } from "./user-schema"
 import { useRevalidateUsers } from "../user-hook"
 /**
  * Create User Form Component
@@ -34,8 +34,8 @@ export function CreateUserForm() {
   const router = useRouter()
   const revalidate = useRevalidateUsers()
 
-  const form = useForm<UserFormValues>({
-    resolver: zodResolver(userSchema),
+  const form = useForm<CreateUserFormValues>({
+    resolver: zodResolver(createUserSchema),
     defaultValues: {
       name: "",
       email: "",
@@ -45,7 +45,7 @@ export function CreateUserForm() {
   })
 
   const createUserMutation = useMutation({
-    mutationFn: async (data: UserFormValues) => {
+    mutationFn: async (data: CreateUserFormValues) => {
       const response = await authClient.admin.createUser({
         name: data.name,
         email: data.email,
@@ -86,7 +86,7 @@ export function CreateUserForm() {
     },
   })
 
-  const onSubmit = (data: UserFormValues) => {
+  const onSubmit = (data: CreateUserFormValues) => {
     createUserMutation.mutate(data)
   }
 

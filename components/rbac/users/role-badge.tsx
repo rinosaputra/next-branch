@@ -1,8 +1,9 @@
 import { Badge } from "@/components/ui/badge"
+import { Role } from "@/lib/auth/permissions"
 import { Shield, Edit3, Eye } from "lucide-react"
 
 interface RoleBadgeProps {
-  role: string | null
+  role: Role | null
   showIcon?: boolean
   className?: string
 }
@@ -40,7 +41,7 @@ export function RoleBadge({
   )
 }
 
-function getRoleConfig(role: string) {
+function getRoleConfig(role: Role) {
   switch (role.toLowerCase()) {
     case "admin":
       return {

@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button"
 import { Form } from "@/components/ui/form"
 import { UserFormFields } from "./user-form-fields"
 import { Loader2 } from "lucide-react"
-import { UserFormValues, userSchema } from "./user-schema"
+import { EditUserFormValues, editUserSchema } from "./user-schema"
 import { Role } from "@/lib/auth/permissions"
 import { useRevalidateUsers } from "../user-hook"
 
@@ -44,8 +44,8 @@ export function EditUserForm({ user }: EditUserFormProps) {
   const router = useRouter()
   const revalidate = useRevalidateUsers()
 
-  const form = useForm<UserFormValues>({
-    resolver: zodResolver(userSchema),
+  const form = useForm<EditUserFormValues>({
+    resolver: zodResolver(editUserSchema),
     defaultValues: {
       name: user.name,
       email: user.email,
@@ -54,7 +54,7 @@ export function EditUserForm({ user }: EditUserFormProps) {
   })
 
   const updateUserMutation = useMutation({
-    mutationFn: async (data: UserFormValues) => {
+    mutationFn: async (data: EditUserFormValues) => {
       // In production, use proper update API
       // For now, using setRole as demonstration
       await authClient.admin.setRole({
@@ -93,7 +93,7 @@ export function EditUserForm({ user }: EditUserFormProps) {
     },
   })
 
-  const onSubmit = (data: UserFormValues) => {
+  const onSubmit = (data: EditUserFormValues) => {
     updateUserMutation.mutate(data)
   }
 

@@ -8,6 +8,7 @@ import { UserRowActions } from "./user-row-actions"
 import { UserWithRole } from "better-auth/plugins"
 import { formatDistanceToNow } from "date-fns"
 import { RoleBadge } from "./role-badge"
+import { Role } from "@/lib/auth/permissions"
 
 // Type definition (should match your Prisma User model)
 export type User = UserWithRole
@@ -107,7 +108,7 @@ export const userColumns: ColumnDef<User>[] = [
     accessorKey: "role",
     header: "Role",
     cell: ({ row }) => {
-      const role = row.getValue("role") as string | null
+      const role = row.getValue("role") as Role | null
       return <RoleBadge role={role} />
     },
     filterFn: (row, id, value) => {
