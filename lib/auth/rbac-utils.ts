@@ -43,6 +43,9 @@ export async function checkPermission(
   return !!hasPermission
 }
 
+const unauthorizedUrl = (process.env.NEXT_PUBLIC_DASHBOARD_URL || "/dashboard")
+  + (process.env.NEXT_PUBLIC_UNAUTHORIZED_URL || "/unauthorized")
+
 /**
  * Require role or redirect
  */
@@ -52,6 +55,6 @@ export async function requireRole(roleName: string) {
   })
 
   if (!session || !session.user.role?.includes(roleName)) {
-    redirect("/unauthorized")
+    redirect(unauthorizedUrl)
   }
 }
