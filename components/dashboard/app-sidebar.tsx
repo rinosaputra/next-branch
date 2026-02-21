@@ -19,18 +19,30 @@ import { navMainItems, navSecondaryItems } from "./config"
 export function AppSidebar({ user, ...props }: React.ComponentProps<typeof Sidebar> & {
   user: User
 }) {
+  const { main, secondary } = useNavItems()
   return (
     <Sidebar
       className="top-(--header-height) h-[calc(100svh-var(--header-height))]!"
       {...props}
     >
       <SidebarContent>
-        <NavMain items={navMainItems} />
-        <NavSecondary items={navSecondaryItems} className="mt-auto" />
+        <NavMain items={main} />
+        <NavSecondary items={secondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
         <NavUser {...user} />
       </SidebarFooter>
     </Sidebar>
   )
+}
+
+export function useNavItems() {
+  const main = React.useMemo(() => navMainItems, []);
+
+  const secondary = React.useMemo(() => navSecondaryItems, []);
+
+  return {
+    main,
+    secondary,
+  }
 }
