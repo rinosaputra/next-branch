@@ -66,7 +66,7 @@ export function DataTableRowActions<TData>({
                 : ""
             }
           >
-            {action.icon && <span className="mr-2">{action.icon}</span>}
+            {action.icon && <span>{action.icon}</span>}
             {action.label}
           </DropdownMenuItem>
         ))}

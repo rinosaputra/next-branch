@@ -61,6 +61,7 @@ export function DataTableToolbar<TData>({
           <Button
             variant="ghost"
             onClick={() => table.resetColumnFilters()}
+            size={"sm"}
           >
             Reset
             <RefreshCw />
