@@ -61,25 +61,25 @@ export function UsersDataTable() {
       data={users}
       searchKey="name"
       searchPlaceholder="Search users by name..."
-      // filterableColumns={[
-      //   {
-      //     id: "role",
-      //     title: "Role",
-      //     options: [
-      //       { label: "Admin", value: "admin" },
-      //       { label: "Editor", value: "editor" },
-      //       { label: "Viewer", value: "viewer" },
-      //     ],
-      //   },
-      //   {
-      //     id: "status",
-      //     title: "Status",
-      //     options: [
-      //       { label: "Active", value: "active" },
-      //       { label: "Banned", value: "banned" },
-      //     ],
-      //   },
-      // ]}
+      filterableColumns={[
+        {
+          id: "role",
+          title: "Role",
+          options: [
+            { label: "Admin", value: "admin" },
+            { label: "Editor", value: "editor" },
+            { label: "Viewer", value: "viewer" },
+          ],
+        },
+        // {
+        //   id: "status",
+        //   title: "Status",
+        //   options: [
+        //     { label: "Active", value: "active" },
+        //     { label: "Banned", value: "banned" },
+        //   ],
+        // },
+      ]}
     />
   )
 }
