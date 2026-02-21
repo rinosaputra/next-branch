@@ -70,6 +70,7 @@ import { usePermission } from "@/hooks/use-permission"
 import { User } from "./columns"
 import { authClient } from "@/lib/auth-client"
 import { createUserSchema, roles } from "./form/user-schema"
+import { useRevalidateUsers } from "./user-hook"
 
 interface UserRowActionsProps {
   row: Row<User>
@@ -118,6 +119,7 @@ type RoleFormValues = z.infer<typeof roleSchema>
  */
 export function UserRowActions({ row }: UserRowActionsProps) {
   const router = useRouter()
+  const revalidate = useRevalidateUsers()
   const user = row.original
 
   // Dialog states
@@ -213,17 +215,20 @@ export function UserRowActions({ row }: UserRowActionsProps) {
     setLoading(true)
 
     try {
-      await authClient.admin.setRole({
+      const result = await authClient.admin.setRole({
         userId: user.id,
         role: data.role,
       })
+      if (!result.data) {
+        throw new Error("Failed to update role")
+      }
 
       toast.success("Role updated successfully", {
         description: `${user.name} is now a ${data.role}.`,
       })
 
       setRoleDialogOpen(false)
-      router.refresh()
+      revalidate()
     } catch (error: any) {
       toast.error("Failed to update role", {
         description: error.message || "An unexpected error occurred",
@@ -247,21 +252,27 @@ export function UserRowActions({ row }: UserRowActionsProps) {
     try {
       if (user.banned) {
         // Unban user
-        await authClient.admin.unbanUser({
+        const result = await authClient.admin.unbanUser({
           userId: user.id,
         })
+        if (!result.data) {
+          throw new Error("Failed to unban user")
+        }
         toast.success(`User ${user.name} has been unbanned`)
       } else {
         // Ban user
-        await authClient.admin.banUser({
+        const result = await authClient.admin.banUser({
           userId: user.id,
           banReason: "Banned by admin",
           // banExpiresIn: 60 * 60 * 24 * 7, // 7 days
         })
+        if (!result.data) {
+          throw new Error("Failed to ban user")
+        }
         toast.success(`User ${user.name} has been banned`)
       }
 
-      router.refresh()
+      revalidate()
     } catch (error: any) {
       toast.error(`Failed to ${user.banned ? "unban" : "ban"} user: ${error.message}`)
     } finally {
@@ -295,12 +306,15 @@ export function UserRowActions({ row }: UserRowActionsProps) {
     setLoading(true)
 
     try {
-      await authClient.admin.removeUser({
+      const result = await authClient.admin.removeUser({
         userId: user.id,
       })
+      if (!result.data) {
+        throw new Error("Failed to delete user")
+      }
 
       toast.success(`User ${user.name} has been deleted`)
-      router.refresh()
+      revalidate()
     } catch (error: any) {
       toast.error(`Failed to delete user: ${error.message}`)
     } finally {

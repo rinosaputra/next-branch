@@ -4,6 +4,7 @@
     "url": "https://github.com/rinosaputra/next-branch/issues"
   },
   "dependencies": {
+    "@prisma/adapter-pg": "^7.4.0",
     "@hookform/resolvers": "^5.2.2",
     "@prisma/client": "^7.4.0",
     "@tailwindcss/postcss": "^4",
@@ -29,7 +30,6 @@
   },
   "description": "Opinionated fullstack Next.js starter template for experimenting and integrating modern packages like Prisma, Better Auth, shadcn/ui, and TanStack.",
   "devDependencies": {
-    "@prisma/adapter-pg": "^7.4.0",
     "@tanstack/react-query-devtools": "^5.91.3",
     "@types/node": "^20",
     "@types/pg": "^8.16.0",

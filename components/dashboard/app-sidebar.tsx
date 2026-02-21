@@ -15,11 +15,12 @@ import { NavMain } from "./nav-main"
 import { NavSecondary } from "./nav-secondary"
 import { User } from "@/lib/auth"
 import { navMainItems, navSecondaryItems } from "./config"
+import { Role } from "@/lib/auth/permissions"
 
 export function AppSidebar({ user, ...props }: React.ComponentProps<typeof Sidebar> & {
   user: User
 }) {
-  const { main, secondary } = useNavItems()
+  const { main, secondary } = useNavItems(user.role as Role)
   return (
     <Sidebar
       className="top-(--header-height) h-[calc(100svh-var(--header-height))]!"
@@ -36,10 +37,20 @@ export function AppSidebar({ user, ...props }: React.ComponentProps<typeof Sideb
   )
 }
 
-export function useNavItems() {
-  const main = React.useMemo(() => navMainItems, []);
+export function useNavItems(role: Role = "viewer") {
+  const main = React.useMemo(() => {
+    return navMainItems.filter((item) => {
+      return item.items.some((subItem) => {
+        return !subItem.roles || subItem.roles.includes(role);
+      });
+    });
+  }, [role]);
 
-  const secondary = React.useMemo(() => navSecondaryItems, []);
+  const secondary = React.useMemo(() => {
+    return navSecondaryItems.filter((item) => {
+      return !item.roles || item.roles.includes(role);
+    });
+  }, [role]);
 
   return {
     main,

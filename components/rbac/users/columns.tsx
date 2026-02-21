@@ -173,6 +173,7 @@ export const userColumns: ColumnDef<User>[] = [
   },
   {
     id: "actions",
+    size: 5,
     cell: ({ row }) => <UserRowActions row={row} />,
   },
 ]

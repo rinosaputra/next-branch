@@ -8,7 +8,8 @@ export const navMainItems: NavMainItem[] = [
       {
         title: "Users",
         url: "/dashboard/users",
-        icon: Users
+        icon: Users,
+        roles: ["admin"] // Only show this item to users with the "admin" role
       }
     ]
   }
