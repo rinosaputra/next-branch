@@ -1,12 +1,11 @@
 "use client"
 
-import { useQuery } from "@tanstack/react-query"
-import { authClient } from "@/lib/auth-client"
 import { DataTable } from "@/components/table/data-table"
 import { userColumns } from "./columns"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { AlertCircle } from "lucide-react"
+import { useUsers } from "./user-hook"
 
 /**
  * Users data table with TanStack Query integration
@@ -30,20 +29,7 @@ import { AlertCircle } from "lucide-react"
  * ```
  */
 export function UsersDataTable() {
-  const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["users"],
-    queryFn: async () => {
-      const result = await authClient.admin.listUsers({
-        query: {
-          limit: 100,
-          offset: 0,
-        },
-      })
-      return result.data
-    },
-    // Refetch on window focus for real-time updates
-    refetchOnWindowFocus: true,
-  })
+  const { query: { data, isLoading, error, refetch } } = useUsers()
 
   if (isLoading) {
     return <UsersTableSkeleton />

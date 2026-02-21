@@ -3,6 +3,9 @@
 import { useState } from "react"
 import { Row } from "@tanstack/react-table"
 import { useRouter } from "next/navigation"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { z } from "zod"
 import { toast } from "sonner"
 import {
   MoreHorizontal,
@@ -14,6 +17,7 @@ import {
   CheckCircle,
   Key,
   Mail,
+  Loader2,
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -27,6 +31,14 @@ import {
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu"
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -36,6 +48,23 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Input } from "@/components/ui/input"
 
 import { usePermission } from "@/hooks/use-permission"
 import { User } from "./columns"
@@ -46,11 +75,37 @@ interface UserRowActionsProps {
 }
 
 /**
+ * Password change validation schema
+ */
+const passwordSchema = z.object({
+  newPassword: z.string().min(8, "Password must be at least 8 characters"),
+  confirmPassword: z.string(),
+}).refine((data) => data.newPassword === data.confirmPassword, {
+  message: "Passwords do not match",
+  path: ["confirmPassword"],
+})
+
+type PasswordFormValues = z.infer<typeof passwordSchema>
+
+/**
+ * Role change validation schema
+ */
+const roleSchema = z.object({
+  role: z.enum(["viewer", "editor", "admin"], {
+    required_error: "Please select a role",
+  }),
+})
+
+type RoleFormValues = z.infer<typeof roleSchema>
+
+/**
  * RBAC-aware row actions for user table
  *
  * Features:
  * - Permission-based action visibility
  * - Confirmation dialogs for destructive actions
+ * - Set password dialog with validation
+ * - Set role dialog with select
  * - Toast notifications
  * - Optimistic updates
  * - Error handling
@@ -58,37 +113,52 @@ interface UserRowActionsProps {
  * Actions:
  * - View user (always visible if read permission)
  * - Edit user (requires user.update)
- * - Change role (requires user.set-role)
+ * - Change role (requires user.set-role) → Dialog
+ * - Set password (requires user.set-password) → Dialog
  * - Ban/Unban user (requires user.ban)
- * - Reset password (requires user.update)
  * - Send email (requires user.update)
  * - Delete user (requires user.delete)
- *
- * @example
- * ```tsx
- * <UserRowActions row={row} />
- * ```
  */
 export function UserRowActions({ row }: UserRowActionsProps) {
   const router = useRouter()
   const user = row.original
 
+  // Dialog states
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [banDialogOpen, setBanDialogOpen] = useState(false)
+  const [passwordDialogOpen, setPasswordDialogOpen] = useState(false)
+  const [roleDialogOpen, setRoleDialogOpen] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  // ✅ Client-side permission checks
+  // Client-side permission checks
   const { hasPermission: canUpdate } = usePermission("user", ["update"])
   const { hasPermission: canDelete } = usePermission("user", ["delete"])
   const { hasPermission: canBan } = usePermission("user", ["ban"])
   const { hasPermission: canSetRole } = usePermission("user", ["set-role"])
+  const { hasPermission: canSetPassword } = usePermission("user", ["set-password"])
+
+  // Password form
+  const passwordForm = useForm<PasswordFormValues>({
+    resolver: zodResolver(passwordSchema),
+    defaultValues: {
+      newPassword: "",
+      confirmPassword: "",
+    },
+  })
+
+  // Role form
+  const roleForm = useForm<RoleFormValues>({
+    resolver: zodResolver(roleSchema),
+    defaultValues: {
+      role: (user.role as "viewer" | "editor" | "admin") || "viewer",
+    },
+  })
 
   /**
    * Handle view user
    */
   const handleView = () => {
-    toast.info(`Viewing user: ${user.name}`)
-    // In production: router.push(`/dashboard/users/${user.id}`)
+    router.push(`/dashboard/users/${user.id}`)
   }
 
   /**
@@ -99,22 +169,71 @@ export function UserRowActions({ row }: UserRowActionsProps) {
       toast.error("You don't have permission to edit users")
       return
     }
-
-    toast.info(`Editing user: ${user.name}`)
-    // In production: router.push(`/dashboard/users/${user.id}/edit`)
+    router.push(`/dashboard/users/${user.id}/edit`)
   }
 
   /**
-   * Handle change role
+   * Handle set password
    */
-  const handleChangeRole = () => {
+  const handleSetPassword = async (data: PasswordFormValues) => {
+    if (!canSetPassword) {
+      toast.error("You don't have permission to set passwords")
+      return
+    }
+
+    setLoading(true)
+
+    try {
+      await authClient.admin.setUserPassword({
+        userId: user.id,
+        newPassword: data.newPassword,
+      })
+
+      toast.success("Password updated successfully", {
+        description: `Password for ${user.name} has been changed.`,
+      })
+
+      setPasswordDialogOpen(false)
+      passwordForm.reset()
+    } catch (error: any) {
+      toast.error("Failed to update password", {
+        description: error.message || "An unexpected error occurred",
+      })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  /**
+   * Handle set role
+   */
+  const handleSetRole = async (data: RoleFormValues) => {
     if (!canSetRole) {
       toast.error("You don't have permission to change user roles")
       return
     }
 
-    toast.info(`Change role for: ${user.name}`)
-    // In production: Open role change dialog/modal
+    setLoading(true)
+
+    try {
+      await authClient.admin.setRole({
+        userId: user.id,
+        role: data.role,
+      })
+
+      toast.success("Role updated successfully", {
+        description: `${user.name} is now a ${data.role}.`,
+      })
+
+      setRoleDialogOpen(false)
+      router.refresh()
+    } catch (error: any) {
+      toast.error("Failed to update role", {
+        description: error.message || "An unexpected error occurred",
+      })
+    } finally {
+      setLoading(false)
+    }
   }
 
   /**
@@ -140,7 +259,7 @@ export function UserRowActions({ row }: UserRowActionsProps) {
         await authClient.admin.banUser({
           userId: user.id,
           banReason: "Banned by admin",
-          // banExpires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+          // banExpiresIn: 60 * 60 * 24 * 7, // 7 days
         })
         toast.success(`User ${user.name} has been banned`)
       }
@@ -155,19 +274,6 @@ export function UserRowActions({ row }: UserRowActionsProps) {
   }
 
   /**
-   * Handle reset password
-   */
-  const handleResetPassword = () => {
-    if (!canUpdate) {
-      toast.error("You don't have permission to reset passwords")
-      return
-    }
-
-    toast.info(`Reset password for: ${user.name}`)
-    // In production: Send password reset email or generate temporary password
-  }
-
-  /**
    * Handle send email
    */
   const handleSendEmail = () => {
@@ -177,7 +283,7 @@ export function UserRowActions({ row }: UserRowActionsProps) {
     }
 
     toast.info(`Composing email to: ${user.email}`)
-    // In production: Open email compose dialog
+    // In production: Open email compose dialog or trigger email
   }
 
   /**
@@ -208,6 +314,7 @@ export function UserRowActions({ row }: UserRowActionsProps) {
 
   return (
     <>
+      {/* Dropdown Menu */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
@@ -219,7 +326,7 @@ export function UserRowActions({ row }: UserRowActionsProps) {
             <span className="sr-only">Open menu</span>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-50">
+        <DropdownMenuContent align="end" className="w-[200px]">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
 
@@ -241,9 +348,17 @@ export function UserRowActions({ row }: UserRowActionsProps) {
 
           {/* Change Role - Requires set-role permission */}
           {canSetRole && (
-            <DropdownMenuItem onClick={handleChangeRole}>
+            <DropdownMenuItem onClick={() => setRoleDialogOpen(true)}>
               <Shield className="mr-2 h-4 w-4" />
               Change Role
+            </DropdownMenuItem>
+          )}
+
+          {/* Set Password - Requires set-password permission */}
+          {canSetPassword && (
+            <DropdownMenuItem onClick={() => setPasswordDialogOpen(true)}>
+              <Key className="mr-2 h-4 w-4" />
+              Set Password
             </DropdownMenuItem>
           )}
 
@@ -268,10 +383,6 @@ export function UserRowActions({ row }: UserRowActionsProps) {
           {canUpdate && (
             <>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleResetPassword}>
-                <Key className="mr-2 h-4 w-4" />
-                Reset Password
-              </DropdownMenuItem>
               <DropdownMenuItem onClick={handleSendEmail}>
                 <Mail className="mr-2 h-4 w-4" />
                 Send Email
@@ -295,6 +406,160 @@ export function UserRowActions({ row }: UserRowActionsProps) {
           )}
         </DropdownMenuContent>
       </DropdownMenu>
+
+      {/* Set Password Dialog */}
+      <Dialog open={passwordDialogOpen} onOpenChange={setPasswordDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Set Password</DialogTitle>
+            <DialogDescription>
+              Set a new password for <strong>{user.name}</strong>. The user will need to use this password to log in.
+            </DialogDescription>
+          </DialogHeader>
+
+          <Form {...passwordForm}>
+            <form onSubmit={passwordForm.handleSubmit(handleSetPassword)} className="space-y-4">
+              <FormField
+                control={passwordForm.control}
+                name="newPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>New Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder="Enter new password"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Must be at least 8 characters long
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={passwordForm.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Confirm Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder="Confirm new password"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <DialogFooter>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    setPasswordDialogOpen(false)
+                    passwordForm.reset()
+                  }}
+                  disabled={loading}
+                >
+                  Cancel
+                </Button>
+                <Button type="submit" disabled={loading}>
+                  {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  Set Password
+                </Button>
+              </DialogFooter>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Set Role Dialog */}
+      <Dialog open={roleDialogOpen} onOpenChange={setRoleDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Change Role</DialogTitle>
+            <DialogDescription>
+              Change the role for <strong>{user.name}</strong>. This will immediately affect their permissions.
+            </DialogDescription>
+          </DialogHeader>
+
+          <Form {...roleForm}>
+            <form onSubmit={roleForm.handleSubmit(handleSetRole)} className="space-y-4">
+              <FormField
+                control={roleForm.control}
+                name="role"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Role</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a role" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="viewer">
+                          <div className="flex flex-col items-start gap-1">
+                            <span className="font-medium">Viewer</span>
+                            <span className="text-xs text-muted-foreground">
+                              Read-only access to content
+                            </span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="editor">
+                          <div className="flex flex-col items-start gap-1">
+                            <span className="font-medium">Editor</span>
+                            <span className="text-xs text-muted-foreground">
+                              Can create and edit content
+                            </span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="admin">
+                          <div className="flex flex-col items-start gap-1">
+                            <span className="font-medium">Administrator</span>
+                            <span className="text-xs text-muted-foreground">
+                              Full system access and user management
+                            </span>
+                          </div>
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormDescription>
+                      Current role: <strong className="capitalize">{user.role || "viewer"}</strong>
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <DialogFooter>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    setRoleDialogOpen(false)
+                    roleForm.reset()
+                  }}
+                  disabled={loading}
+                >
+                  Cancel
+                </Button>
+                <Button type="submit" disabled={loading}>
+                  {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  Change Role
+                </Button>
+              </DialogFooter>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
 
       {/* Delete Confirmation Dialog */}
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
