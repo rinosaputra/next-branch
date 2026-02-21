@@ -45,6 +45,7 @@ import {
 } from "lucide-react"
 import { formatDistanceToNow } from "date-fns"
 import { createMetadata } from "@/lib/metadata"
+import { Role } from "@/lib/auth/permissions"
 
 /**
  * User Detail Page
@@ -265,7 +266,7 @@ export default async function UserDetailPage({ params }: UserDetailPageProps) {
                     Role
                   </dt>
                   <dd>
-                    <RoleBadge role={user.role || "viewer"} showIcon />
+                    <RoleBadge role={(user.role as Role) || "viewer"} showIcon />
                   </dd>
                 </div>
 
