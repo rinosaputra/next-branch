@@ -7,7 +7,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { NavMainItem } from "./config"
+import { NavMainItem } from "./types"
 import Link from "next/link"
 
 export function NavMain({

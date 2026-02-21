@@ -7,7 +7,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { NavItem } from "./config"
+import { NavItem } from "./types"
 import { Link } from "lucide-react"
 
 export function NavSecondary({

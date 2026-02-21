@@ -1,12 +1,5 @@
-import type { LucideIcon } from "lucide-react"
+import { NavMainItem, NavSecondaryItem } from "./types";
 
-export interface NavItem {
-  title: string
-  url: string
-  icon: LucideIcon
-}
+export const navMainItems: NavMainItem[] = []
 
-export interface NavMainItem {
-  title: string
-  items: NavItem[]
-}
+export const navSecondaryItems: NavSecondaryItem[] = []
