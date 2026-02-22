@@ -71,6 +71,7 @@ import { User } from "./columns"
 import { authClient } from "@/lib/auth-client"
 import { createUserSchema, roles } from "./form/user-schema"
 import { useRevalidateUsers } from "./user-hook"
+import { defaultRole, Role } from "@/lib/auth/permissions"
 
 interface UserRowActionsProps {
   row: Row<User>
@@ -149,7 +150,7 @@ export function UserRowActions({ row }: UserRowActionsProps) {
   const roleForm = useForm<RoleFormValues>({
     resolver: zodResolver(roleSchema),
     defaultValues: {
-      role: (user.role as "viewer" | "editor" | "admin") || "viewer",
+      role: (user.role as Role) || defaultRole,
     },
   })
 
