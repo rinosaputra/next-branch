@@ -52,3 +52,7 @@ export const roles = {
 } as const
 
 export type Role = keyof typeof roles
+
+export const defaultRole: Role = "viewer"
+
+export type Statement = typeof statement
