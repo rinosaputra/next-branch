@@ -14,7 +14,7 @@ export async function requirePermission(
   resource: string,
   actions: string[]
 ) {
-  const hasPermission = await auth.api.userHasPermission({
+  const { success: hasPermission } = await auth.api.userHasPermission({
     headers: await headers(),
     body: {
       permissions: {
@@ -35,7 +35,7 @@ export async function checkPermission(
   resource: string,
   actions: string[]
 ): Promise<boolean> {
-  const hasPermission = await auth.api.userHasPermission({
+  const { success: hasPermission } = await auth.api.userHasPermission({
     headers: await headers(),
     body: {
       permissions: {
