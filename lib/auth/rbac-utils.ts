@@ -2,6 +2,10 @@
 import { auth } from "@/lib/auth"
 import { headers } from "next/headers"
 import { redirect } from "next/navigation"
+import { roles } from "./permissions"
+
+const unauthorizedUrl = (process.env.NEXT_PUBLIC_DASHBOARD_URL || "/dashboard")
+  + (process.env.NEXT_PUBLIC_UNAUTHORIZED_URL || "/unauthorized")
 
 /**
  * Require permission or redirect to unauthorized
@@ -20,7 +24,7 @@ export async function requirePermission(
   })
 
   if (!hasPermission) {
-    redirect("/unauthorized")
+    redirect(unauthorizedUrl)
   }
 }
 
@@ -43,9 +47,6 @@ export async function checkPermission(
   return !!hasPermission
 }
 
-const unauthorizedUrl = (process.env.NEXT_PUBLIC_DASHBOARD_URL || "/dashboard")
-  + (process.env.NEXT_PUBLIC_UNAUTHORIZED_URL || "/unauthorized")
-
 /**
  * Require role or redirect
  */
@@ -57,4 +58,21 @@ export async function requireRole(roleName: string) {
   if (!session || !session.user.role?.includes(roleName)) {
     redirect(unauthorizedUrl)
   }
+}
+
+/**
+ * Check if User is System Admin
+ *
+ * Returns true if user has any global admin role.
+ * Does NOT check organization roles.
+ */
+export async function isSystemAdmin(): Promise<boolean> {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
+
+  if (!session) return false
+
+  // Check if user has any admin role
+  return Object.keys(roles).includes(session.user.role || "")
 }
