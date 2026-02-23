@@ -12,7 +12,7 @@ import { Form } from "@/components/ui/form"
 import { UserFormFields } from "./user-form-fields"
 import { Loader2 } from "lucide-react"
 import { Role } from "@/lib/auth/permissions"
-import { useRevalidateUsers } from "../user-hook"
+import { useRevalidateUsers } from "../../../../hooks/rbac/users"
 import { EditUserInput, editUserSchema } from "@/lib/validations/user"
 
 interface EditUserFormProps {

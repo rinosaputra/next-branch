@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button"
 import { Form } from "@/components/ui/form"
 import { UserFormFields } from "./user-form-fields"
 import { Loader2 } from "lucide-react"
-import { useRevalidateUsers } from "../user-hook"
+import { useRevalidateUsers } from "../../../../hooks/rbac/users"
 import { CreateUserInput, createUserSchema } from "@/lib/validations/user"
 /**
  * Create User Form Component
