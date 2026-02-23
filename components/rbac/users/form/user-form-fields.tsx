@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
 import { Eye, EyeOff } from "lucide-react"
-import { roles } from "./user-schema"
+import { roleSelectOptions } from "@/lib/validations/user"
 
 /**
  * Shared user form fields
@@ -140,7 +140,7 @@ export function UserFormFields({ form, isEditMode = false }: UserFormFieldsProps
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                {roles.map((role) => (
+                {roleSelectOptions.map((role) => (
                   <SelectItem key={role.value} value={role.value}>
                     <div className="flex flex-col items-start gap-1">
                       <span className="font-medium">{role.label}</span>

@@ -69,26 +69,13 @@ import { Input } from "@/components/ui/input"
 import { usePermission } from "@/hooks/use-permission"
 import { User } from "./columns"
 import { authClient } from "@/lib/auth-client"
-import { createUserSchema, roles } from "./form/user-schema"
 import { useRevalidateUsers } from "./user-hook"
 import { defaultRole, Role } from "@/lib/auth/permissions"
+import { ChangePasswordInput, changePasswordSchema, createUserSchema, roleSelectOptions } from "@/lib/validations/user"
 
 interface UserRowActionsProps {
   row: Row<User>
 }
-
-/**
- * Password change validation schema
- */
-const passwordSchema = z.object({
-  newPassword: z.string().min(8, "Password must be at least 8 characters"),
-  confirmPassword: z.string(),
-}).refine((data) => data.newPassword === data.confirmPassword, {
-  message: "Passwords do not match",
-  path: ["confirmPassword"],
-})
-
-type PasswordFormValues = z.infer<typeof passwordSchema>
 
 /**
  * Role change validation schema
@@ -138,8 +125,8 @@ export function UserRowActions({ row }: UserRowActionsProps) {
   const { hasPermission: canSetPassword } = usePermission("user", ["set-password"])
 
   // Password form
-  const passwordForm = useForm<PasswordFormValues>({
-    resolver: zodResolver(passwordSchema),
+  const passwordForm = useForm<ChangePasswordInput>({
+    resolver: zodResolver(changePasswordSchema),
     defaultValues: {
       newPassword: "",
       confirmPassword: "",
@@ -175,7 +162,7 @@ export function UserRowActions({ row }: UserRowActionsProps) {
   /**
    * Handle set password
    */
-  const handleSetPassword = async (data: PasswordFormValues) => {
+  const handleSetPassword = async (data: ChangePasswordInput) => {
     if (!canSetPassword) {
       toast.error("You don't have permission to set passwords")
       return
@@ -517,7 +504,7 @@ export function UserRowActions({ row }: UserRowActionsProps) {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {roles.map((role) => (
+                        {roleSelectOptions.map((role) => (
                           <SelectItem key={role.value} value={role.value}>
                             <div className="flex flex-col items-start gap-1">
                               <span className="font-medium">{role.label}</span>
