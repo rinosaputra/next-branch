@@ -1,140 +1,97 @@
-# Next Branch – Default
+## Feature: Password Input
 
-This branch represents the **baseline Next.js setup** for the `next-branch` repository.
+Production-grade password input component with strength indicator.
 
-It contains a clean and minimal installation of Next.js using:
+### Components Added
+- `InputGroup` - Composable input wrapper (prefix/suffix support)
+- `PasswordInput` - Password input with show/hide toggle
+- `PasswordStrength` - Strength indicator (0-4 levels)
 
-- Next.js (App Router)
-- React
-- TypeScript
-- Tailwind CSS
-- ESLint
+### Utilities Added
+- `calculatePasswordStrength()` - Strength calculation
+- `meetsMinimumRequirements()` - Validation helper
 
-No additional integrations (Prisma, Better Auth, shadcn/ui, TanStack, etc.) are included in this branch.
+### Documentation
+- Component README: `components/input/password/README.md`
+- Usage guide: `docs/PASSWORD_INPUT.md`
 
----
+### Usage
+```tsx
+import { PasswordInput } from "@/components/input/password"
 
-## 🎯 Purpose of This Branch
+<PasswordInput
+  value={password}
+  onChange={(e) => setPassword(e.target.value)}
+  showStrength
+/>
+```
 
-The `default` branch serves as:
+### Integration Ready
+- ✅ react-hook-form
+- ✅ Zod validation
+- ✅ shadcn Field components
+- ✅ Better Auth forms
+```
 
-- A clean starting point
-- A comparison baseline for other branches
-- The foundation for feature integrations
-- A reference for minimal Next.js configuration
-
-If you are looking for a more complete starter with additional packages integrated, please check other branches.
-
----
-
-## 🚀 Getting Started
-
-Clone the repository:
+### **Step 5: Merge to Dev**
 
 ```bash
-git clone https://github.com/rinosaputra/next-branch.git
-cd next-branch
-git checkout default
-```
+# Push feature branch
+git push origin feature/password-input
 
-Install dependencies:
+# Create PR to dev
+gh pr create --base dev --title "feat(password): Password input with strength indicator" --body "..."
 
-```bash
-npm install
-```
-
-Set up environment variables:
-
-```bash
-cp .env.example .env
-```
-
-Edit `.env` if needed (optional for baseline setup).
-
-Run development server:
-
-```bash
-npm run dev
-```
-
-Open:
-
-```
-http://localhost:3000
+# After review & approval
+git checkout dev
+git merge feature/password-input --no-ff
+git push origin dev
 ```
 
 ---
 
-## ⚙️ Environment Variables
+## ✅ **Master Prompt Alignment**
 
-This branch uses minimal environment configuration:
+| Principle | Implementation |
+|-----------|----------------|
+| **"Modular but not fragmented"** | ✅ Reusable InputGroup primitive |
+| **"Opinionated but extensible"** | ✅ Strong defaults, customizable |
+| **"Minimal but powerful"** | ✅ Essential features only |
+| **"No unnecessary bloat"** | ✅ Only 3 components + 1 utility |
+| **"Clean integration, not package dumping"** | ✅ Composable architecture |
 
-```env
-# Application
-NODE_ENV="development"
-NEXT_PUBLIC_APP_URL="http://localhost:3000"
-NEXT_PUBLIC_APP_NAME="Next.js Starter"
+---
+
+## 🎯 **Summary**
+
+**Password Input Feature Branch:**
+
+```
+feature/password-input
+├── components/ui/input-group.tsx          # ✅ Reusable primitive
+├── components/input/password/
+│   ├── index.tsx                          # ✅ Password input
+│   ├── strength.tsx                       # ✅ Strength indicator
+│   └── README.md                          # ✅ Component docs
+├── lib/validations/password.ts            # ✅ Validation utils
+├── docs/PASSWORD_INPUT.md                 # ✅ Usage guide
+└── components/ui/button.tsx (enhanced)    # ✅ Icon support
 ```
 
-**Note:** Database, authentication, and other service variables are added in feature branches (`feature/prisma-setup`, `feature/better-auth-setup`, etc.)
-
----
-
-## 🌱 Branch Strategy Overview
-
-- `default` → Clean Next.js baseline (this branch)
-- `dev` → Integration branch (feature merging)
-- `feature/*` → Feature development branches
-- `main` → Stable integrated version (if available)
-
----
-
-## 📦 Tech Stack (Default Branch)
-
-- Next.js 16 (App Router)
-- React 19
-- TypeScript 5
-- Tailwind CSS 4
-- ESLint 9
-
-**No additional packages installed.**
-
----
-
-## 🔗 Feature Branches
-
-To explore specific integrations, check out these feature branches:
-
-| Branch | Integration |
-|--------|-------------|
-| `feature/prisma-setup` | Prisma ORM + PostgreSQL |
-| `feature/better-auth-setup` | Better Auth + Prisma |
-| `feature/shadcn-setup` | shadcn/ui components (minimal) |
-| `feature/auth-ui` | Authentication UI pages |
-
-Each branch builds incrementally on this baseline.
-
----
-
-## 🧠 About This Repository
-
-`next-branch` is a public experimental repository designed to explore and integrate modern fullstack tools in a structured way.
-
-Each branch may represent a different stage of stack integration.
+**Features:**
+- ✅ **Show/hide toggle** (Eye/EyeOff icons)
+- ✅ **Strength indicator** (5 levels, color-coded)
+- ✅ **Real-time feedback** (improvement suggestions)
+- ✅ **Accessible** (ARIA labels, keyboard nav)
+- ✅ **Error states** (validation support)
+- ✅ **Form compatible** (react-hook-form, Formik)
+- ✅ **Composable** (InputGroup primitive)
+- ✅ **Production-grade** (validation utilities)
 
 **Philosophy:**
-- Branch-based evolution
-- Modular but not fragmented
-- Clean integration, not package dumping
-- Production-grade patterns
+- **Modular:** Reusable InputGroup for other input patterns
+- **Powerful:** Complete password UX (toggle + strength)
+- **Clean:** Composable architecture, single responsibility
+- **Production-ready:** Security best practices, accessibility
 
----
-
-## 📄 License
-
-MIT License
-
----
-
-**Part of the [next-branch](https://github.com/rinosaputra/next-branch) architecture.**
-**Built with discipline. Designed for scale.**
+**This feature branch provides a production-grade password input system aligned with master prompt principles of modularity, clean integration, and long-term maintainability.** 🔐✅🔥
