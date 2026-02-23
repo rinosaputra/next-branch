@@ -5,7 +5,8 @@ import { columns } from "@/components/organization/lists/columns"
 import { Building2, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { useOrganizationList } from "./organization-hook"
+import { useOrganizationList } from "../../../hooks/organization"
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty"
 
 // Role filter options for toolbar
 const roleFilterOptions = [
@@ -32,10 +33,9 @@ const roleFilterOptions = [
 ]
 
 /**
- * Organizations Table (Async Component)
+ * Organizations Data Table
  *
- * Fetches organizations data and renders DataTable.
- * Separated for Suspense boundary optimization.
+ * Displays a list of organizations the user belongs to, with role-based filtering and search
  */
 export default function OrganizationsDataTable() {
 
@@ -50,19 +50,21 @@ export default function OrganizationsDataTable() {
   // Empty state
   if (organizations.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-12">
-        <Building2 className="h-12 w-12 text-muted-foreground" />
-        <h3 className="mt-4 text-lg font-semibold">No organizations yet</h3>
-        <p className="text-sm text-muted-foreground text-center max-w-sm mt-2">
-          Create your first organization to collaborate with your team
-        </p>
-        <Button asChild className="mt-4">
+      <Empty>
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <Building2 />
+          </EmptyMedia>
+          <EmptyTitle>No organizations</EmptyTitle>
+          <EmptyDescription>You don't belong to any organizations yet.</EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent>
           <Link href="/dashboard/organizations/create">
             <Plus />
             Create Organization
           </Link>
-        </Button>
-      </div>
+        </EmptyContent>
+      </Empty>
     )
   }
 

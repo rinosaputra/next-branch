@@ -16,6 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { DataTableColumnHeader } from "@/components/table/data-table-column-header"
+import { OrganizationRole } from "@/lib/auth/organization/permissions"
 
 /**
  * Organization type definition
@@ -28,7 +29,7 @@ export type Organization = {
   slug: string
   logo: string | null
   memberCount: number
-  role: "owner" | "admin" | "editor" | "viewer"
+  role: OrganizationRole
   createdAt: Date
   isActive: boolean
 }
@@ -239,16 +240,16 @@ export const columns: ColumnDef<Organization>[] = [
 
             <DropdownMenuItem asChild>
               <Link href={`/dashboard/organizations/${organization.slug}`}>
-                <Eye className="mr-2 h-4 w-4" />
+                <Eye />
                 View Details
               </Link>
             </DropdownMenuItem>
 
-            {(organization.role === "owner" || organization.role === "admin") && (
+            {(organization.role === "orgOwner" || organization.role === "orgAdmin") && (
               <>
                 <DropdownMenuItem asChild>
                   <Link href={`/dashboard/organizations/${organization.slug}/members`}>
-                    <Users className="mr-2 h-4 w-4" />
+                    <Users />
                     Members
                   </Link>
                 </DropdownMenuItem>
@@ -257,7 +258,7 @@ export const columns: ColumnDef<Organization>[] = [
 
                 <DropdownMenuItem asChild>
                   <Link href={`/dashboard/organizations/${organization.slug}/settings`}>
-                    <Settings className="mr-2 h-4 w-4" />
+                    <Settings />
                     Settings
                   </Link>
                 </DropdownMenuItem>
