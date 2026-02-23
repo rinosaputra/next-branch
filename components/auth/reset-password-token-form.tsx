@@ -18,7 +18,7 @@ import { useEffect, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { authNavigationLinks, formFieldConfig } from "./const"
-import { InputPassword } from "./input-password"
+import { PasswordInput } from "../input/password"
 
 // Variable for title, description, submit button, and navigation links
 const config = {
@@ -174,13 +174,15 @@ export default function ResetPasswordTokenForm() {
               <FieldLabel htmlFor={field.name}>
                 {config.field.password.label}
               </FieldLabel>
-              <InputPassword
+              <PasswordInput
                 {...field}
                 id={field.name}
                 aria-invalid={fieldState.invalid}
                 placeholder={config.field.password.placeholder}
                 autoComplete="new-password"
                 disabled={resetPassword.isPending}
+                showStrength
+                showStrengthFeedback
               />
               {fieldState.invalid && (
                 <FieldError errors={[fieldState.error]} />
@@ -198,7 +200,7 @@ export default function ResetPasswordTokenForm() {
               <FieldLabel htmlFor={field.name}>
                 {config.field.confirmPassword.label}
               </FieldLabel>
-              <InputPassword
+              <PasswordInput
                 {...field}
                 id={field.name}
                 aria-invalid={fieldState.invalid}

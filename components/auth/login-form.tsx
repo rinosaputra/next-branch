@@ -19,7 +19,7 @@ import { Controller, useForm } from "react-hook-form"
 import { authNavigationLinks, defaultRedirectURL, formFieldConfig, oauthProviders } from "./const"
 import Link from "next/link"
 import { toast } from "sonner"
-import { InputPassword } from "./input-password"
+import { PasswordInput } from "../input/password"
 
 // variable for title, description, submit button, oauth providers, and navigation links
 const config = {
@@ -118,7 +118,7 @@ export default function LoginForm() {
                 {config.forgotPassword.label}
               </Link>
             </div>
-            <InputPassword
+            <PasswordInput
               {...field}
               id={field.name}
               aria-invalid={fieldState.invalid}
