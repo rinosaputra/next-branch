@@ -3,7 +3,7 @@ import { prismaAdapter } from 'better-auth/adapters/prisma'
 import { prisma } from '@/lib/prisma'
 import { admin, organization } from 'better-auth/plugins'
 import { ac, defaultRole, roles } from './auth/permissions'
-import { defaultOrganizationRole, orgAc, organizationRoles } from './auth/organization/permissions'
+import { defaultCreatoreOrganizationRole, orgAc, organizationRoles } from './auth/organization/permissions'
 import { OrganizationInvitationEmail } from './email/emplates/organization-invitation'
 import { sendEmail } from './email/send'
 
@@ -28,7 +28,7 @@ export const auth = betterAuth({
       // Organization creation
       allowUserToCreateOrganization: true,
       organizationLimit: 5,
-      creatorRole: defaultOrganizationRole,
+      creatorRole: defaultCreatoreOrganizationRole,
 
       // Membership
       membershipLimit: 100,
@@ -61,3 +61,4 @@ type Auth = typeof auth.$Infer.Session
 
 export type User = Auth['user']
 export type Session = Auth['session']
+export type Organization = typeof auth.$Infer.Organization

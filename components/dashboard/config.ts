@@ -12,6 +12,17 @@ export const navMainItems: NavMainItem[] = [
         roles: ["admin"] // Only show this item to users with the "admin" role
       }
     ]
+  },
+  {
+    title: "Organizations",
+    items: [
+      {
+        title: "All Organizations",
+        url: "/dashboard/organizations",
+        icon: Users,
+        roles: ["admin"] // Show to both admin and regular users
+      }
+    ]
   }
 ]
 

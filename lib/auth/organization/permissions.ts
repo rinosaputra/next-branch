@@ -45,7 +45,7 @@ export const orgAc = createAccessControl(organizationStatements)
  */
 
 // Organization Owner (Creator, Full Control)
-export const owner = orgAc.newRole({
+export const orgOwner = orgAc.newRole({
   // Default organization permissions (full control)
   ...ownerAc.statements,
 
@@ -56,7 +56,7 @@ export const owner = orgAc.newRole({
 })
 
 // Organization Admin (Manage Members & Settings)
-export const admin = orgAc.newRole({
+export const orgAdmin = orgAc.newRole({
   // Default admin permissions (manage members)
   ...defaultAdminAc.statements,
 
@@ -67,7 +67,7 @@ export const admin = orgAc.newRole({
 })
 
 // Organization Editor (Create & Edit Content)
-export const editor = orgAc.newRole({
+export const orgEditor = orgAc.newRole({
   // Default member permissions (basic access)
   ...defaultMemberAc.statements,
 
@@ -77,7 +77,7 @@ export const editor = orgAc.newRole({
 })
 
 // Organization Viewer (Read-only)
-export const viewer = orgAc.newRole({
+export const orgViewer = orgAc.newRole({
   // Default member permissions (basic access)
   ...defaultMemberAc.statements,
 
@@ -90,10 +90,10 @@ export const viewer = orgAc.newRole({
  * Export Organization Roles
  */
 export const organizationRoles = {
-  owner,
-  admin,
-  editor,
-  viewer,
+  orgOwner,
+  orgAdmin,
+  orgEditor,
+  orgViewer,
 }
 
 /**
@@ -101,6 +101,6 @@ export const organizationRoles = {
  */
 export type OrganizationRole = keyof typeof organizationRoles
 
-export const defaultOrganizationRole: OrganizationRole = "viewer"
+export const defaultCreatoreOrganizationRole: OrganizationRole = "orgOwner"
 
 export type OrganizationStatements = typeof organizationStatements
