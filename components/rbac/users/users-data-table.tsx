@@ -5,7 +5,7 @@ import { userColumns } from "./columns"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { AlertCircle } from "lucide-react"
-import { useUsers } from "./user-hook"
+import { useUsers } from "../../../hooks/rbac/users"
 
 /**
  * Users data table with TanStack Query integration

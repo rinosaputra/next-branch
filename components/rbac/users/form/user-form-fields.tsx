@@ -20,7 +20,8 @@ import {
 } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
 import { Eye, EyeOff } from "lucide-react"
-import { roles } from "./user-schema"
+import { roleSelectOptions } from "@/lib/validations/user"
+import { PasswordInput } from "@/components/input/password"
 
 /**
  * Shared user form fields
@@ -93,10 +94,11 @@ export function UserFormFields({ form, isEditMode = false }: UserFormFieldsProps
               <FormLabel>Password</FormLabel>
               <FormControl>
                 <div className="relative">
-                  <Input
-                    type={showPassword ? "text" : "password"}
+                  <PasswordInput
                     placeholder="••••••••"
                     {...field}
+                    showStrength
+                    showStrengthFeedback
                   />
                   <Button
                     type="button"
@@ -140,7 +142,7 @@ export function UserFormFields({ form, isEditMode = false }: UserFormFieldsProps
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                {roles.map((role) => (
+                {roleSelectOptions.map((role) => (
                   <SelectItem key={role.value} value={role.value}>
                     <div className="flex flex-col items-start gap-1">
                       <span className="font-medium">{role.label}</span>
