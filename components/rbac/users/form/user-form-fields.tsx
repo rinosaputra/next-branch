@@ -21,6 +21,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Eye, EyeOff } from "lucide-react"
 import { roleSelectOptions } from "@/lib/validations/user"
+import { PasswordInput } from "@/components/input/password"
 
 /**
  * Shared user form fields
@@ -93,10 +94,11 @@ export function UserFormFields({ form, isEditMode = false }: UserFormFieldsProps
               <FormLabel>Password</FormLabel>
               <FormControl>
                 <div className="relative">
-                  <Input
-                    type={showPassword ? "text" : "password"}
+                  <PasswordInput
                     placeholder="••••••••"
                     {...field}
+                    showStrength
+                    showStrengthFeedback
                   />
                   <Button
                     type="button"

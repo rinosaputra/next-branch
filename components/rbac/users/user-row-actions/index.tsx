@@ -64,14 +64,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Input } from "@/components/ui/input"
 
 import { usePermission } from "@/hooks/use-permission"
-import { User } from "./columns"
+import { User } from "../columns"
 import { authClient } from "@/lib/auth-client"
-import { useRevalidateUsers } from "./user-hook"
+import { useRevalidateUsers } from "../user-hook"
 import { defaultRole, Role } from "@/lib/auth/permissions"
 import { ChangePasswordInput, changePasswordSchema, createUserSchema, roleSelectOptions } from "@/lib/validations/user"
+import { PasswordInput } from "@/components/input/password"
 
 interface UserRowActionsProps {
   row: Row<User>
@@ -425,15 +425,14 @@ export function UserRowActions({ row }: UserRowActionsProps) {
                   <FormItem>
                     <FormLabel>New Password</FormLabel>
                     <FormControl>
-                      <Input
-                        type="password"
+                      <PasswordInput
                         placeholder="Enter new password"
                         {...field}
+                        {...field}
+                        showStrength
+                        showStrengthFeedback
                       />
                     </FormControl>
-                    <FormDescription>
-                      Must be at least 8 characters long
-                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -446,8 +445,7 @@ export function UserRowActions({ row }: UserRowActionsProps) {
                   <FormItem>
                     <FormLabel>Confirm Password</FormLabel>
                     <FormControl>
-                      <Input
-                        type="password"
+                      <PasswordInput
                         placeholder="Confirm new password"
                         {...field}
                       />

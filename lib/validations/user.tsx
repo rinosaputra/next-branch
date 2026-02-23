@@ -1,5 +1,6 @@
 import { z } from "zod"
 import { roles as permissionRoles, type Role } from "@/lib/auth/permissions"
+import { passwordSchema } from "./password"
 
 /**
  * User Validation Schemas
@@ -75,36 +76,6 @@ export const roleSelectOptions = roleOptions.map((role) => ({
   description: roleMetadata[role].description,
 }))
 
-// ============================================================================
-// Validation Schemas
-// ============================================================================
-
-/**
- * Password validation schema
- *
- * Requirements:
- * - Minimum 8 characters
- * - At least 1 uppercase letter
- * - At least 1 lowercase letter
- * - At least 1 number
- * - At least 1 special character
- */
-export const passwordSchema = z
-  .string()
-  .min(8, "Password must be at least 8 characters")
-  .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
-  .regex(/[a-z]/, "Password must contain at least one lowercase letter")
-  .regex(/[0-9]/, "Password must contain at least one number")
-  .regex(
-    /[^A-Za-z0-9]/,
-    "Password must contain at least one special character"
-  )
-
-/**
- * Email validation schema
- *
- * Enforces valid email format with better error messages.
- */
 export const emailSchema = z
   .string()
   .min(1, "Email is required")
@@ -160,11 +131,7 @@ export type CreateUserInput = z.infer<typeof createUserSchema>
  * Used for user editing forms.
  * Excludes password (use separate password change form).
  */
-export const editUserSchema = z.object({
-  name: nameSchema,
-  email: emailSchema,
-  role: roleSchema,
-})
+export const editUserSchema = createUserSchema.omit({ password: true })
 
 export type EditUserInput = z.infer<typeof editUserSchema>
 
@@ -239,40 +206,4 @@ export function getRoleDescription(role: Role): string {
  */
 export function isValidRole(role: string): role is Role {
   return roleOptions.includes(role as Role)
-}
-
-/**
- * Password strength validator (for UI feedback)
- *
- * Returns password strength score (0-4) and feedback messages.
- *
- * @param password - Password to validate
- * @returns Strength score and feedback
- */
-export function getPasswordStrength(password: string): {
-  score: 0 | 1 | 2 | 3 | 4
-  feedback: string[]
-} {
-  let score = 0
-  const feedback: string[] = []
-
-  if (password.length >= 8) score++
-  else feedback.push("At least 8 characters required")
-
-  if (/[A-Z]/.test(password)) score++
-  else feedback.push("Add uppercase letter")
-
-  if (/[a-z]/.test(password)) score++
-  else feedback.push("Add lowercase letter")
-
-  if (/[0-9]/.test(password)) score++
-  else feedback.push("Add number")
-
-  if (/[^A-Za-z0-9]/.test(password)) score++
-  else feedback.push("Add special character")
-
-  return {
-    score: Math.min(score, 4) as 0 | 1 | 2 | 3 | 4,
-    feedback,
-  }
 }
