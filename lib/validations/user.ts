@@ -77,9 +77,8 @@ export const roleSelectOptions = roleOptions.map((role) => ({
 }))
 
 export const emailSchema = z
-  .string()
-  .min(1, "Email is required")
   .email("Invalid email address")
+  .min(1, "Email is required")
   .toLowerCase()
   .trim()
 
