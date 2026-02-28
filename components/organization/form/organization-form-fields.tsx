@@ -1,7 +1,7 @@
 "use client"
 
 import { UseFormReturn } from "react-hook-form"
-import { CreateOrganizationInput } from "@/lib/validations/organization"
+import { CreateOrganizationInput, EditOrganizationInput } from "@/lib/validations/organization"
 import { useState } from "react"
 import { Loader2 } from "lucide-react"
 

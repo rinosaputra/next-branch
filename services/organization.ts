@@ -74,7 +74,10 @@ export async function checkOrganizationSlug(slug: string) {
       headers: await headers(),
     })
 
-    return response
+    return {
+      status: response.status,
+      slug
+    }
   } catch (error) {
     console.error("Error checking organization slug:", error)
     throw error
@@ -113,5 +116,26 @@ export async function deleteOrganization(organizationId: string) {
   } catch (error) {
     console.error("Error deleting organization:", error)
     throw error
+  }
+}
+
+
+export async function fetchOrganizationBySlug(slug: string) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
+  if (!session) {
+    throw new Error("Unauthorized")
+  }
+  const findOrg = await auth.api.getFullOrganization({
+    headers: await headers(),
+    query: { organizationSlug: slug },
+  })
+  if(!findOrg) {
+    throw new Error("Organization not found")
+  }
+  return {
+    ...findOrg,
+    user: findOrg.members.find(m => m.userId === session.user.id) || null,
   }
 }

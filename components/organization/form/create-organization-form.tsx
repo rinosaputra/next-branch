@@ -15,6 +15,8 @@ import {
   createOrganizationSchema,
   type CreateOrganizationInput,
 } from "@/lib/validations/organization"
+import { useCheckOrganizationSlug, useCreateOrganization } from "@/hooks/organization"
+import { Spinner } from "@/components/ui/spinner"
 
 /**
  * Create Organization Form Component
@@ -42,7 +44,8 @@ import {
  */
 export function CreateOrganizationForm() {
   const router = useRouter()
-  const [isCheckingSlug, setIsCheckingSlug] = useState(false)
+  const create = useCreateOrganization() // Initialize mutation hook
+  const checkSlug = useCheckOrganizationSlug() // Initialize slug check hook
 
   const form = useForm<CreateOrganizationInput>({
     resolver: zodResolver(createOrganizationSchema),
@@ -53,68 +56,25 @@ export function CreateOrganizationForm() {
       description: "",
     },
   })
-
-  /**
-   * Check slug availability
-   *
-   * Debounced check to avoid excessive API calls
-   */
-  const checkSlugAvailability = async (slug: string) => {
-    if (!slug || slug.length < 2) return
-
-    setIsCheckingSlug(true)
-    try {
-      const result = await authClient.organization.checkSlug({
-        slug,
-      })
-
-      if (!result.data?.available) {
-        form.setError("slug", {
-          type: "manual",
-          message: "This slug is already taken",
-        })
-      } else {
-        form.clearErrors("slug")
-      }
-    } catch (error: any) {
-      console.error("Failed to check slug:", error)
-    } finally {
-      setIsCheckingSlug(false)
-    }
-  }
+  const slugValue = form.watch("slug")
+  const isCheckingSlug = checkSlug.data?.slug === slugValue && checkSlug.data.status
 
   /**
    * Handle form submission
    */
   const onSubmit = async (data: CreateOrganizationInput) => {
-    try {
-      const result = await authClient.organization.create({
-        name: data.name,
-        slug: data.slug,
-        logo: data.logo || undefined,
-        // Note: Better Auth may not support description by default
-        // Add via additionalFields if needed
-      })
-
-      if (result.error) {
-        toast.error("Failed to create organization", {
-          description: result.error.message,
-        })
-        return
+    toast.promise(
+      create.mutateAsync(data),
+      {
+        loading: "Creating organization...",
+        success: () => {
+          form.reset() // Reset form after successful creation
+          router.push(`/dashboard/organizations/${data.slug}`)
+          return "Organization created successfully!"
+        },
+        error: "Failed to create organization",
       }
-
-      toast.success("Organization created successfully", {
-        description: `${data.name} is now ready to use.`,
-      })
-
-      // Redirect to organization page
-      router.push(`/dashboard/organizations/${data.slug}`)
-      router.refresh()
-    } catch (error: any) {
-      toast.error("Failed to create organization", {
-        description: error.message || "An unexpected error occurred",
-      })
-    }
+    )
   }
 
   return (
@@ -133,9 +93,7 @@ export function CreateOrganizationForm() {
             disabled={form.formState.isSubmitting || isCheckingSlug}
             className="flex-1"
           >
-            {form.formState.isSubmitting && (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            )}
+            {form.formState.isSubmitting && <Spinner />}
             {form.formState.isSubmitting ? "Creating..." : "Create Organization"}
           </Button>
 

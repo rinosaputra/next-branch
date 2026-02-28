@@ -116,14 +116,14 @@ async function OrganizationOverview({
         <div className="flex gap-2">
           <Button asChild variant="outline">
             <Link href={`/dashboard/organizations/${slug}/settings`}>
-              <Settings className="mr-2 h-4 w-4" />
+              <Settings />
               Settings
             </Link>
           </Button>
 
           <Button asChild>
             <Link href={`/dashboard/organizations/${slug}/members`}>
-              <UserPlus className="mr-2 h-4 w-4" />
+              <UserPlus />
               Invite Members
             </Link>
           </Button>

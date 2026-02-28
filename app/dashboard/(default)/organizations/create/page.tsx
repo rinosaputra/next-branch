@@ -1,7 +1,3 @@
-import { redirect } from "next/navigation"
-import { auth } from "@/lib/auth"
-import { headers } from "next/headers"
-
 import {
   Card,
   CardContent,
@@ -9,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { CreateOrganizationForm } from "@/components/organization/create-organization-form"
+import { CreateOrganizationForm } from "@/components/organization/form/create-organization-form"
 import { createMetadata } from "@/lib/metadata"
 
 export const metadata = createMetadata({
@@ -31,16 +27,7 @@ export const metadata = createMetadata({
  *
  * @route /dashboard/organizations/create
  */
-export default async function CreateOrganizationPage() {
-  // ✅ Server-side authentication check
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  })
-
-  if (!session) {
-    redirect("/login")
-  }
-
+export default function CreateOrganizationPage() {
   return (
     <div className="flex flex-1 flex-col gap-6 p-4 pt-0">
       {/* Page Header */}
